@@ -21,18 +21,23 @@ class MyApp extends StatelessWidget {
       ChangeNotifierProvider.value(value: MovieProviders(), ),
       ChangeNotifierProvider.value(value: Auth(),)],
     
-      child: MaterialApp(
-        title: 'MyMovie ',
-        theme: ThemeData(
-            primarySwatch: Colors.pink,
-            accentColor: Colors.black,
-            fontFamily: 'Lato'),
-        home:MoviesOverviewScreen(),
-        routes: {
-          MovieDetail.routeName: (ctx) => MovieDetail(),
-          MoviesOverviewScreen.routeName:(ctx)=>MoviesOverviewScreen(),
-          FavoriteMovies.routeName:(ctx)=>FavoriteMovies(),
-        },
+      child: Consumer<Auth>(
+        builder: (ctx,auth,child)=>  MaterialApp(
+          title: 'MyMovie ',
+          theme: ThemeData(
+              primarySwatch: Colors.pink,
+              accentColor: Colors.black,
+              fontFamily: 'Lato'),
+          home:MoviesOverviewScreen(),
+          //auth.isAuth?MoviesOverviewScreen()
+          //:AuthScreen(),
+          routes: {
+            MovieDetail.routeName: (ctx) => MovieDetail(),
+            MoviesOverviewScreen.routeName:(ctx)=>MoviesOverviewScreen(),
+            FavoriteMovies.routeName:(ctx)=>FavoriteMovies(),
+          },
+        ),
+       
       ),
     );
   }

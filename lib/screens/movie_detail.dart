@@ -35,16 +35,16 @@ class _MovieDetailState extends State<MovieDetail> {
             ],
             expandedHeight: 300,
             pinned: true,
-            flexibleSpace: FlexibleSpaceBar(
-              title: Text(loadedMovie.title),
-              background: Hero(
-                tag: loadedMovie.id,
-                child: Image.network(
-                  loadedMovie.image,
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
+            // flexibleSpace: FlexibleSpaceBar(
+            //   title: Text(loadedMovie.title),
+            //   background: Hero(
+            //     tag: loadedMovie.id,
+            //     child: Image.network(
+            //       'https://image.tmdb.org/t/p/w500'+loadedMovie.image,
+            //       fit: BoxFit.cover,
+            //     ),
+            //   ),
+            // ),
           ),
           SliverList(
             delegate: SliverChildListDelegate(

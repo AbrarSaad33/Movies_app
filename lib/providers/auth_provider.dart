@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'dart:convert';
@@ -68,15 +69,31 @@ class Auth with ChangeNotifier {
       String phone, String urlSegment) async {
     final url = Uri.parse(
         'https://identitytoolkit.googleapis.com/v1/accounts:$urlSegment?key=AIzaSyC0A2nQi5LIxVUk0TTvmM3nhjN3OZ87pm8');
-    final response = await http.post(url,
-        body: json.encode({
-          'email': email,
-          'password': password,
-          'name': name,
-          'phone': phone,
-          'returnSecureToken': true
-        }));
-    print(json.decode(response.body));
+
+    try {
+      final response = await http.post(url,
+          body: json.encode({
+            'email': email,
+            'password': password,
+            'name': name,
+            'phone': phone,
+            'returnSecureToken': true
+          }));
+
+      final responseData = json.decode(response.body);
+      if (responseData['error'] != null) {
+        throw HttpException(responseData['error']['message']);
+      }
+       _token = responseData['idToken'];
+      _userId = responseData['localId'];
+     _expiryDate = DateTime.now()
+         .add(Duration(seconds: int.parse(responseData['expiresIn'])));
+  
+     notifyListeners();
+    } catch (error) {
+      throw error;
+    }
+    // print(json.decode(response.body));
   }
 
   Future<void> singup(

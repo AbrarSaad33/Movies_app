@@ -16,10 +16,10 @@ class MovieItem extends StatelessWidget {
             Navigator.of(context)
                 .pushNamed(MovieDetail.routeName, arguments: loadedMovie.id);
           },
-          child: Image.network(
-            loadedMovie.image,
+          child:Image.network('https://image.tmdb.org/t/p/w500'+loadedMovie.image, 
             fit: BoxFit.cover,
-          ),
+          
+        ),
         ),
         footer: GridTileBar(
           backgroundColor: Colors.black87,
