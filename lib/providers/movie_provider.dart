@@ -79,6 +79,26 @@ class MovieProviders with ChangeNotifier {
       throw Exception("Failed to load movies!");
     }
   }
+
+ Future<void> fetchUpcomingMovies() async {
+    final url = Uri.parse(
+        "https://api.themoviedb.org/3/movie/upcoming?api_key=5b12e705c1ab3a4385c6d4bcd63ad3a7");
+    try {
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        final result = jsonDecode(response.body);
+        Iterable list = result["results"];
+        final loadedMovies =list.map((movie) => Movie.fromJson(movie)).toList();
+        _items = loadedMovies;
+        notifyListeners();
+      }
+    } catch (error) {
+      throw Exception("Failed to load movies!");
+    }
+  }
+
+  
 }
 
 

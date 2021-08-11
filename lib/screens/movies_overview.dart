@@ -3,6 +3,7 @@ import 'package:moives_app/providers/movie.dart';
 import 'package:moives_app/providers/movie_provider.dart';
 import 'package:moives_app/screens/favorite_movie.dart';
 import 'package:moives_app/screens/top_rated.dart';
+import 'package:moives_app/screens/upcominfg_movie_screen.dart';
 import 'package:moives_app/widgets/app_drawer.dart';
 import '../widgets/movie_grid.dart';
 import 'package:provider/provider.dart';
@@ -77,9 +78,11 @@ class _MoviesOverviewScreenState extends State<MoviesOverviewScreen> {
               setState(() {
                 if (selected == 0) {
                   _showFavoritesOnly = false;
-                } else if(selected==1){
+                } else if (selected == 1) {
                   Navigator.of(context)
                       .pushNamed(TopRatedMovieScreen.routeName);
+                } else if (selected == 2) {
+                  Navigator.of(context).pushNamed(UpComingMovieScreen.routeName);
                 }
               });
             },
@@ -94,13 +97,10 @@ class _MoviesOverviewScreenState extends State<MoviesOverviewScreen> {
                 value: 1,
               ),
               PopupMenuItem(
-                child: Text('English Movie'),
+                child: Text('UpComing'),
                 value: 2,
               ),
-              PopupMenuItem(
-                child: Text('Carton Movie'),
-                value: 3,
-              )
+             
             ],
           ),
         ],

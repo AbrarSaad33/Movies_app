@@ -3,18 +3,18 @@ import 'package:moives_app/providers/movie.dart';
 import 'package:moives_app/providers/movie_provider.dart';
 import 'package:moives_app/screens/favorite_movie.dart';
 import 'package:moives_app/screens/movies_overview.dart';
-import 'package:moives_app/screens/upcominfg_movie_screen.dart';
+import 'package:moives_app/screens/top_rated.dart';
 import 'package:moives_app/widgets/app_drawer.dart';
 import '../widgets/movie_grid.dart';
 import 'package:provider/provider.dart';
 
-class TopRatedMovieScreen extends StatefulWidget {
-  static const routeName = '/Top_rated';
+class UpComingMovieScreen extends StatefulWidget {
+  static const routeName = '/Up_Coming';
   @override
-  TopRatedMovieScreenState createState() => TopRatedMovieScreenState();
+  UpComingScreenState createState() => UpComingScreenState();
 }
 
-class TopRatedMovieScreenState extends State<TopRatedMovieScreen> {
+class UpComingScreenState extends State<UpComingMovieScreen> {
   var _showFavoritesOnly = false;
   var isInit = true;
   final List<Movie> movies = [];
@@ -61,7 +61,7 @@ class TopRatedMovieScreenState extends State<TopRatedMovieScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Top Rated Movies'),
+        title: const Text('UPComing'),
         actions: [
           // IconButton(
           //   color: Theme.of(context).accentColor,
@@ -83,6 +83,10 @@ class TopRatedMovieScreenState extends State<TopRatedMovieScreen> {
                 } else if (selected == 2) {
                   Navigator.of(context).pushNamed(UpComingMovieScreen.routeName);
                 }
+                else if(selected==1){
+                   Navigator.of(context)
+                      .pushNamed(TopRatedMovieScreen.routeName);
+                }
               });
             },
             icon: Icon(Icons.more_vert),
@@ -96,10 +100,9 @@ class TopRatedMovieScreenState extends State<TopRatedMovieScreen> {
                 value: 1,
               ),
               PopupMenuItem(
-                child: Text('UpComing'),
+                child: Text('UPComing'),
                 value: 2,
               ),
-             
             ],
           ),
         ],
