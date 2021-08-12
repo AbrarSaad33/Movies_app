@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:moives_app/providers/movie.dart';
 import 'package:moives_app/providers/movie_provider.dart';
-import 'package:moives_app/screens/favorite_movie.dart';
 import 'package:moives_app/screens/movies_overview.dart';
 import 'package:moives_app/screens/top_rated.dart';
 import 'package:moives_app/widgets/app_drawer.dart';
@@ -39,16 +38,8 @@ class UpComingScreenState extends State<UpComingMovieScreen> {
       setState(() {
         _isLoading = true;
       });
-
-//  void _populateAllMovies() async {
-//     final movies = await _fetchAllMovies();
-//     setState(() {
-//      _items = movies;
-//     });
-//   }
-
-      Provider.of<MovieProviders>(context)
-          .fetchTopRatrdMovies()
+Provider.of<MovieProviders>(context)
+          .fetchUpcomingMovies()
           .then((_) => setState(() {
                 _isLoading = false;
               }));
@@ -80,9 +71,7 @@ class UpComingScreenState extends State<UpComingMovieScreen> {
                  // _showFavoritesOnly = false;
                   Navigator.of(context)
                       .pushNamed(MoviesOverviewScreen.routeName);
-                } else if (selected == 2) {
-                  Navigator.of(context).pushNamed(UpComingMovieScreen.routeName);
-                }
+                } 
                 else if(selected==1){
                    Navigator.of(context)
                       .pushNamed(TopRatedMovieScreen.routeName);

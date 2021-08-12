@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:moives_app/providers/auth_provider.dart';
+import 'package:moives_app/providers/movie_provider.dart';
 import 'package:moives_app/screens/movies_overview.dart';
+import 'package:provider/provider.dart';
 
 class AppDrawer extends StatelessWidget {
   @override
@@ -24,7 +27,11 @@ class AppDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.logout),
             title: Text('LogOut'),
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pushReplacementNamed('/');
+              Provider.of<Auth>(context, listen: false).logout();
+            },
           ),
         ],
       ),

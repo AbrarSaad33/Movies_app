@@ -15,8 +15,10 @@ class _MovieDetailState extends State<MovieDetail> {
   @override
   Widget build(BuildContext context) {
     final movieId = ModalRoute.of(context)!.settings.arguments as String;
-    final loadedMovie = Provider.of<MovieProviders>(context,listen: false).findById(movieId);
+    final loadedMovie =
+        Provider.of<MovieProviders>(context, listen: false).findById(movieId);
     return Scaffold(
+      //backgroundColor: Theme.of(context).accentColor,
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
@@ -40,7 +42,7 @@ class _MovieDetailState extends State<MovieDetail> {
               background: Hero(
                 tag: loadedMovie.id,
                 child: Image.network(
-                  'https://image.tmdb.org/t/p/w500'+loadedMovie.image,
+                  'https://image.tmdb.org/t/p/w500' + loadedMovie.image,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -49,28 +51,31 @@ class _MovieDetailState extends State<MovieDetail> {
           SliverList(
             delegate: SliverChildListDelegate(
               [
-                SizedBox(height: 20),
-                Container(
-                  alignment: Alignment.center,
-                  child: RatingBar.builder(
-                    initialRating: 3,
-                    minRating: 1,
-                    direction: Axis.horizontal,
-                    allowHalfRating: true,
-                    itemCount: 4,
-                    itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-                    itemBuilder: (context, _) => Icon(
-                      Icons.star,
-                      color: Colors.red,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Container(
+                        alignment: Alignment.bottomRight,
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.star_purple500_outlined,
+                            color: Colors.amber,
+                          ),
+                          onPressed: () {},
+                        )),
+                    Container(
+                      margin: EdgeInsets.only(right: 10),
+                      child: Text(loadedMovie.rate.toString()),
+                      alignment: Alignment.bottomRight,
                     ),
-                    onRatingUpdate: (rating) {
-                      print(rating);
-                    },
-                  ),
+                    SizedBox(
+                      width: 5,
+                    ),
+                  ],
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: 10),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  padding: EdgeInsets.symmetric(horizontal: 5),
                   width: double.infinity,
                   child: Text(
                     'OverView :',
@@ -88,6 +93,8 @@ class _MovieDetailState extends State<MovieDetail> {
                     textAlign: TextAlign.start,
                     style: TextStyle(
                       fontSize: 16,
+                     // fontWeight: FontWeight.normal,
+                      fontFamily:'Anton',
                     ),
                     softWrap: true,
                   ),

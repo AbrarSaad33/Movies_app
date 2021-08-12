@@ -27,12 +27,13 @@ class MyApp extends StatelessWidget {
         builder: (ctx,auth,child)=>  MaterialApp(
           title: 'MyMovie ',
           theme: ThemeData(
-              primarySwatch: Colors.pink,
-              accentColor: Colors.black,
+              primarySwatch: Colors.blue,
+              accentColor: Colors.amber,
               fontFamily: 'Lato'),
-          home:MoviesOverviewScreen(),
-          //auth.isAuth?MoviesOverviewScreen()
-          //:AuthScreen(),
+          home:
+         // MoviesOverviewScreen(),
+        auth.isAuth?MoviesOverviewScreen()
+          :AuthScreen(),
           routes: {
             MovieDetail.routeName: (ctx) => MovieDetail(),
             MoviesOverviewScreen.routeName:(ctx)=>MoviesOverviewScreen(),

@@ -20,6 +20,7 @@ class _MoviesOverviewScreenState extends State<MoviesOverviewScreen> {
   final List<Movie> movies = [];
 
   var _isLoading = false;
+
   void setState(fn) {
     if (mounted) super.setState(fn);
   }
@@ -39,14 +40,6 @@ class _MoviesOverviewScreenState extends State<MoviesOverviewScreen> {
       setState(() {
         _isLoading = true;
       });
-
-//  void _populateAllMovies() async {
-//     final movies = await _fetchAllMovies();
-//     setState(() {
-//      _items = movies;
-//     });
-//   }
-
       Provider.of<MovieProviders>(context)
           .fetchAllMovies()
           .then((_) => setState(() {
@@ -60,6 +53,7 @@ class _MoviesOverviewScreenState extends State<MoviesOverviewScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
         title: const Text('MyMovie'),
         actions: [
@@ -81,8 +75,11 @@ class _MoviesOverviewScreenState extends State<MoviesOverviewScreen> {
                 } else if (selected == 1) {
                   Navigator.of(context)
                       .pushNamed(TopRatedMovieScreen.routeName);
+                 
                 } else if (selected == 2) {
-                  Navigator.of(context).pushNamed(UpComingMovieScreen.routeName);
+                  Navigator.of(context)
+                      .pushNamed(UpComingMovieScreen.routeName);
+                 
                 }
               });
             },
@@ -100,7 +97,6 @@ class _MoviesOverviewScreenState extends State<MoviesOverviewScreen> {
                 child: Text('UpComing'),
                 value: 2,
               ),
-             
             ],
           ),
         ],

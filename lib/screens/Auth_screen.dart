@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:moives_app/providers/auth_provider.dart';
 import 'package:moives_app/screens/movies_overview.dart';
 import 'package:provider/provider.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
 enum AuthMode { Signup, Login }
 
@@ -15,33 +16,33 @@ class AuthScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AuthMode _authMode = AuthMode.Login;
-   final deviceSize = MediaQuery.of(context).size;
+    final deviceSize = MediaQuery.of(context).size;
     // final transformConfig = Matrix4.rotationZ(-8 * pi / 180);
     // transformConfig.translate(-10.0);
     return Scaffold(
       // resizeToAvoidBottomInset: false,
-      body:Stack(
-          children: <Widget>[
-            Container(
-              height: double.infinity,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    // Color.fromRGBO(215, 117, 255, 1).withOpacity(0.5),
-                    // Color.fromRGBO(255, 188, 117, 1).withOpacity(0.9),
-                    Color(0xFFF06292),
-                    Color(0xFF61A4F1),
-                    Color(0xFFF80AB),
-                    Color(0xFF880E4F)
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  stops: [0.1,0.4,0.7,0.9],
-                ),
+      body: Stack(
+        children: <Widget>[
+          Container(
+            height: double.infinity,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  // Color.fromRGBO(215, 117, 255, 1).withOpacity(0.5),
+                  // Color.fromRGBO(255, 188, 117, 1).withOpacity(0.9),
+                  Color(0xFFF06292),
+                  Color(0xFF61A4F1),
+                  Color(0xFFF80AB),
+                  Color(0xFF880E4F)
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                stops: [0.1, 0.4, 0.7, 0.9],
               ),
             ),
-            SingleChildScrollView(
+          ),
+          SingleChildScrollView(
             child: Container(
               height: deviceSize.height,
               width: deviceSize.width,
@@ -157,7 +158,8 @@ class _AuthCardState extends State<AuthCard> {
             _authData['name'] as String,
             _authData['phone'] as String);
       }
-      Navigator.of(context).pushReplacementNamed(MoviesOverviewScreen.routeName);
+      Navigator.of(context)
+          .pushReplacementNamed(MoviesOverviewScreen.routeName);
     } on HttpException catch (error) {
       var errorMessage = 'Authentication failed';
       if (error.toString().contains('EMAIL_EXISTS')) {
@@ -211,68 +213,54 @@ class _AuthCardState extends State<AuthCard> {
       ),
       elevation: 8.0,
       child: Container(
-        height: 
-        _authMode == AuthMode.Signup ? 800: 300,
+        height: _authMode == AuthMode.Signup ? 800 : 300,
         constraints:
             BoxConstraints(minHeight: _authMode == AuthMode.Signup ? 800 : 350),
-          width: deviceSize.width * 0.75,
+        width: deviceSize.width * 0.75,
         padding: EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
-                // Row(children: [RaisedButton(
-                //     child:
-                //         Text(_authMode == AuthMode.Login ? 'LOGIN' : 'SIGN UP'),
-                //     onPressed: _submit,
-                //     shape: RoundedRectangleBorder(
-                //       borderRadius: BorderRadius.circular(30),
-                //     ),
-                //     padding:
-                //         EdgeInsets.symmetric(horizontal: 40.0, vertical: 8.0),
-                //     color: Theme.of(context).primaryColor,
-                //     textColor: Theme.of(context).primaryTextTheme.button!.color,
-                //   ),
-                // FlatButton(
-                //   child: Text(
-                //       '${_authMode == AuthMode.Login ? 'SIGNUP' : 'LOGIN'}'),
-                //   onPressed: _switchAuthMode,
-                //   padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 4),
-                //   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                //   textColor: Theme.of(context).primaryColor,
-                // ),],),
-                // SizedBox(height: 10,),
                 CircleAvatar(
                   child: Image.network(
                     'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png',
                     fit: BoxFit.cover,
                   ),
                 ),
-                SizedBox(height: 20,),
+                SizedBox(
+                  height: 20,
+                ),
+                if (_authMode == AuthMode.Signup)
+                  TextFormField(
+                    decoration: InputDecoration(labelText: 'Name'),
+                    keyboardType: TextInputType.name,
+                    textInputAction: TextInputAction.next,
+                    onFieldSubmitted: (_) {
+                      FocusScope.of(context).requestFocus(phoneFocusNode);
+                    },
+                    validator: (value) {
+                      if (value!.isEmpty || value.length < 5) {
+                        return 'Invalid name!';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      _authData['name'] = value!;
+                    },
+                  ),
+
+              //  InternationalPhoneNumberInput(
+                //
                 if (_authMode == AuthMode.Signup)
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'Name'),
-                  keyboardType: TextInputType.name,
-                  textInputAction: TextInputAction.next,
-                  onFieldSubmitted: (_) {
-                    FocusScope.of(context).requestFocus(phoneFocusNode);
-                  },
-                  validator: (value) {
-                    if (value!.isEmpty || value.length < 5) {
-                      return 'Invalid name!';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    _authData['name'] = value!;
-                  },
-                ),
-                TextFormField(
                   decoration: InputDecoration(labelText: 'Phone'),
+               // hintText: 'phone',
                   keyboardType: TextInputType.phone,
                   textInputAction: TextInputAction.next,
                   focusNode: phoneFocusNode,
+                  //inputDecoration: InputDecoration(contentPadding: EdgeInsets.all(2),),
                   onFieldSubmitted: (_) {
                     FocusScope.of(context).requestFocus(passwordFocusNode);
                   },
@@ -283,7 +271,7 @@ class _AuthCardState extends State<AuthCard> {
                     return null;
                   },
                   onSaved: (value) {
-                    _authData['phone'] = value!;
+                    _authData['phone'] = value as String;
                   },
                 ),
                 TextFormField(
@@ -323,7 +311,7 @@ class _AuthCardState extends State<AuthCard> {
                           }
                         : null,
                   ),
-                if (_authMode == AuthMode.Signup)
+               // if (_authMode == AuthMode.Signup)
                   TextFormField(
                     decoration: InputDecoration(labelText: 'E-Mail'),
                     keyboardType: TextInputType.emailAddress,

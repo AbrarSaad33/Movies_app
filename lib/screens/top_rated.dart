@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:moives_app/providers/movie.dart';
 import 'package:moives_app/providers/movie_provider.dart';
-import 'package:moives_app/screens/favorite_movie.dart';
 import 'package:moives_app/screens/movies_overview.dart';
 import 'package:moives_app/screens/upcominfg_movie_screen.dart';
 import 'package:moives_app/widgets/app_drawer.dart';

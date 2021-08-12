@@ -105,20 +105,19 @@ class Auth with ChangeNotifier {
       String email, String password, String name, String phone) async {
     return _authenticate(email, password, name, phone, 'signInWithPassword');
   }
-
-  // Future<void> logout() async {
-  //   _expiryDate = null;
-  //   _userId = '';
-  //   _token = '';
-  //   if (_authTimer != null) {
-  //     _authTimer!.cancel();
-  //     _authTimer = null;
-  //   }
-  //   notifyListeners();
-  //   final prefs = await SharedPreferences.getInstance();
-  //   prefs.clear();
-  //   print('expiredate is $_expiryDate ,userId is $_userId,token is $_token');
-  // }
+ void logout()  {
+    _expiryDate = null;
+    _userId = '';
+    _token = '';
+    // if (_authTimer != null) {
+    //   _authTimer!.cancel();
+    //   _authTimer = null;
+    // }
+    notifyListeners();
+    //final prefs = await SharedPreferences.getInstance();
+   // prefs.clear();
+    //print('expiredate is $_expiryDate ,userId is $_userId,token is $_token');
+  }
 
   // Future<bool> tryAutoLogin() async {
   //   final prefs = await SharedPreferences.getInstance();

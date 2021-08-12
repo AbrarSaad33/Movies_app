@@ -31,7 +31,7 @@ class MovieItem extends StatelessWidget {
               },
               icon: Icon(loadedMovie.isFavorite
                   ? Icons.favorite
-                  : Icons.favorite_border),
+                  : Icons.favorite_border,color: Colors.white,),
             ),
             
           ),
