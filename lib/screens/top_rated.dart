@@ -23,28 +23,12 @@ class TopRatedMovieScreenState extends State<TopRatedMovieScreen> {
     if (mounted) super.setState(fn);
   }
 
-  // @override
-  // void initState() {
-  //   Future.delayed(Duration.zero).then((_){
-  //   Provider.of<MovieProviders>(context,listen: false).fetchAllMovies();
-  //   });
-  //   super.initState();
-
-  // }
-
   @override
   void didChangeDependencies() {
     if (isInit) {
       setState(() {
         _isLoading = true;
       });
-
-//  void _populateAllMovies() async {
-//     final movies = await _fetchAllMovies();
-//     setState(() {
-//      _items = movies;
-//     });
-//   }
 
       Provider.of<MovieProviders>(context)
           .fetchTopRatrdMovies()
@@ -76,11 +60,12 @@ class TopRatedMovieScreenState extends State<TopRatedMovieScreen> {
             onSelected: (selected) {
               setState(() {
                 if (selected == 0) {
-                 // _showFavoritesOnly = false;
+                  // _showFavoritesOnly = false;
                   Navigator.of(context)
                       .pushNamed(MoviesOverviewScreen.routeName);
                 } else if (selected == 2) {
-                  Navigator.of(context).pushNamed(UpComingMovieScreen.routeName);
+                  Navigator.of(context)
+                      .pushNamed(UpComingMovieScreen.routeName);
                 }
               });
             },
@@ -98,7 +83,6 @@ class TopRatedMovieScreenState extends State<TopRatedMovieScreen> {
                 child: Text('UpComing'),
                 value: 2,
               ),
-             
             ],
           ),
         ],

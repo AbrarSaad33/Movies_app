@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moives_app/providers/auth_provider.dart';
-import 'package:moives_app/providers/movie_provider.dart';
 import 'package:moives_app/screens/movies_overview.dart';
+import 'package:moives_app/screens/start.dart';
 import 'package:provider/provider.dart';
 
 class AppDrawer extends StatelessWidget {
@@ -29,8 +29,8 @@ class AppDrawer extends StatelessWidget {
             title: Text('LogOut'),
             onTap: () {
               Navigator.of(context).pop();
-              Navigator.of(context).pushReplacementNamed('/');
-              Provider.of<Auth>(context, listen: false).logout();
+              Navigator.of(context).pushNamed(Start.routeName);
+              Provider.of<Auth>(context,listen: false).logout();
             },
           ),
         ],

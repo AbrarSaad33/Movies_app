@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:moives_app/providers/auth_provider.dart';
 import '../providers/movie.dart';
 import '../screens/movie_detail.dart';
 import 'package:provider/provider.dart';
@@ -7,7 +8,8 @@ import 'package:provider/provider.dart';
 class MovieItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final loadedMovie = Provider.of<Movie>(context,listen: false);
+    final loadedMovie = Provider.of<Movie>(context, listen: false);
+    final authData = Provider.of<Auth>(context);
     return ClipRRect(
       borderRadius: BorderRadius.circular(15),
       child: GridTile(
@@ -16,29 +18,39 @@ class MovieItem extends StatelessWidget {
             Navigator.of(context)
                 .pushNamed(MovieDetail.routeName, arguments: loadedMovie.id);
           },
-          child:Image.network('https://image.tmdb.org/t/p/w500'+loadedMovie.image, 
+          child: Image.network(
+            'https://image.tmdb.org/t/p/w500' + loadedMovie.image,
+            errorBuilder: (BuildContext context, Object exception,
+                StackTrace? stackTrace) {
+              return Text('can\'t load image');
+            },
             fit: BoxFit.cover,
-          
-        ),
+          ),
         ),
         footer: GridTileBar(
           backgroundColor: Colors.black87,
           leading: Consumer<Movie>(
-            builder: (ctx,mov,child)=>IconButton(
+            builder: (ctx, mov, child) => IconButton(
               color: Theme.of(context).accentColor,
               onPressed: () {
-                loadedMovie.toggleFavoriteStatus();
+                loadedMovie.toggleFavoriteStatus(
+                    authData.token, authData.userId);
               },
-              icon: Icon(loadedMovie.isFavorite
-                  ? Icons.favorite
-                  : Icons.favorite_border,color: Colors.white,),
+              icon: Icon(
+                loadedMovie.isFavorite ? Icons.favorite : Icons.favorite_border,
+                color: Colors.white,
+              ),
             ),
-            
           ),
-          title: Text(
-            loadedMovie.title,
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 16),
+          title: Container(
+            child: Text(
+              loadedMovie.title,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 13,
+              ),
+              maxLines: 1,
+            ),
           ),
         ),
       ),

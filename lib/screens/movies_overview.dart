@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moives_app/providers/auth_provider.dart';
 import 'package:moives_app/providers/movie.dart';
 import 'package:moives_app/providers/movie_provider.dart';
 import 'package:moives_app/screens/favorite_movie.dart';
@@ -24,15 +25,6 @@ class _MoviesOverviewScreenState extends State<MoviesOverviewScreen> {
   void setState(fn) {
     if (mounted) super.setState(fn);
   }
-
-  // @override
-  // void initState() {
-  //   Future.delayed(Duration.zero).then((_){
-  //   Provider.of<MovieProviders>(context,listen: false).fetchAllMovies();
-  //   });
-  //   super.initState();
-
-  // }
 
   @override
   void didChangeDependencies() {
@@ -63,6 +55,7 @@ class _MoviesOverviewScreenState extends State<MoviesOverviewScreen> {
               Navigator.of(context).pushNamed(FavoriteMovies.routeName);
               setState(() {
                 _showFavoritesOnly = true;
+                print(_showFavoritesOnly);
               });
             },
             icon: Icon(Icons.favorite),
@@ -71,15 +64,15 @@ class _MoviesOverviewScreenState extends State<MoviesOverviewScreen> {
             onSelected: (selected) {
               setState(() {
                 if (selected == 0) {
-                  _showFavoritesOnly = false;
+                  setState(() {
+                    _showFavoritesOnly = true;
+                  });
                 } else if (selected == 1) {
                   Navigator.of(context)
                       .pushNamed(TopRatedMovieScreen.routeName);
-                 
                 } else if (selected == 2) {
                   Navigator.of(context)
                       .pushNamed(UpComingMovieScreen.routeName);
-                 
                 }
               });
             },
@@ -102,7 +95,11 @@ class _MoviesOverviewScreenState extends State<MoviesOverviewScreen> {
         ],
       ),
       drawer: AppDrawer(),
-      body: MovieGrid(_showFavoritesOnly),
+      body: _isLoading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : MovieGrid(_showFavoritesOnly),
     );
   }
 }

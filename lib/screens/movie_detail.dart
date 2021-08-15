@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:moives_app/providers/auth_provider.dart';
 import 'package:moives_app/providers/movie_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -17,6 +17,7 @@ class _MovieDetailState extends State<MovieDetail> {
     final movieId = ModalRoute.of(context)!.settings.arguments as String;
     final loadedMovie =
         Provider.of<MovieProviders>(context, listen: false).findById(movieId);
+    final authData = Provider.of<Auth>(context);
     return Scaffold(
       //backgroundColor: Theme.of(context).accentColor,
       body: CustomScrollView(
@@ -27,7 +28,7 @@ class _MovieDetailState extends State<MovieDetail> {
                 color: Theme.of(context).accentColor,
                 onPressed: () {
                   setState(() {
-                    loadedMovie.toggleFavoriteStatus();
+                    loadedMovie.toggleFavoriteStatus(authData.token,authData.userId);
                   });
                 },
                 icon: Icon(loadedMovie.isFavorite
@@ -93,8 +94,7 @@ class _MovieDetailState extends State<MovieDetail> {
                     textAlign: TextAlign.start,
                     style: TextStyle(
                       fontSize: 16,
-                     // fontWeight: FontWeight.normal,
-                      fontFamily:'Anton',
+                      fontFamily: 'Anton',
                     ),
                     softWrap: true,
                   ),

@@ -28,10 +28,23 @@ class MovieProviders with ChangeNotifier {
     //     image:
     //         'https://media.elcinema.com/uploads/_315x420_bca5be9b1f735c8a4c2e64b7c80a191a0cb167844860dfc68cbe21ab6ca4fc19.jpg')
   ];
+  // final String authToken ;
+  // final String userId ;
 
+  // MovieProviders(this.authToken, this.userId, this._items);
   List<Movie> get items {
     return [..._items];
   }
+
+  // String? _authToken;
+  // set authToken(String value) {
+  //   _authToken = value;
+  // }
+
+  // String? _userId;
+  // set userId(String userIdValue) {
+  //   _userId = userIdValue;
+  // }
 
   List<Movie> get favoriteItems {
     return _items.where((movItem) => movItem.isFavorite).toList();
@@ -42,15 +55,17 @@ class MovieProviders with ChangeNotifier {
     return _items.firstWhere((movie) => movie.id == id);
   }
 
+
   Future<void> fetchAllMovies() async {
     final url = Uri.parse(
-        "https://api.themoviedb.org/3/movie/popular?api_key=5b12e705c1ab3a4385c6d4bcd63ad3a7");
+        "http://api.themoviedb.org/3/movie/popular?api_key=5b12e705c1ab3a4385c6d4bcd63ad3a7");
     try {
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
         final result = jsonDecode(response.body);
         Iterable list = result["results"];
+
         final loadedMovies =
             list.map((movie) => Movie.fromJson(movie)).toList();
         _items = loadedMovies;
@@ -63,7 +78,7 @@ class MovieProviders with ChangeNotifier {
 
   Future<void> fetchTopRatrdMovies() async {
     final url = Uri.parse(
-        "https://api.themoviedb.org/3/movie/top_rated?api_key=5b12e705c1ab3a4385c6d4bcd63ad3a7");
+        "http://api.themoviedb.org/3/movie/top_rated?api_key=5b12e705c1ab3a4385c6d4bcd63ad3a7");
     try {
       final response = await http.get(url);
 
@@ -82,7 +97,7 @@ class MovieProviders with ChangeNotifier {
 
   Future<void> fetchUpcomingMovies() async {
     final url = Uri.parse(
-        "https://api.themoviedb.org/3/movie/upcoming?api_key=5b12e705c1ab3a4385c6d4bcd63ad3a7");
+        "http://api.themoviedb.org/3/movie/upcoming?api_key=5b12e705c1ab3a4385c6d4bcd63ad3a7");
     try {
       final response = await http.get(url);
 
@@ -92,26 +107,6 @@ class MovieProviders with ChangeNotifier {
         final loadedMovies =
             list.map((movie) => Movie.fromJson(movie)).toList();
         _items = loadedMovies;
-        notifyListeners();
-      }
-    } catch (error) {
-      throw Exception("Failed to load movies!");
-    }
-  }
-
-  Future<void> fetchvideos() async {
-    final url = Uri.parse(
-        "https://api.themoviedb.org/3/movie/id/videos?api_key=5b12e705c1ab3a4385c6d4bcd63ad3a7");
-    try {
-      final response = await http.get(url);
-
-      if (response.statusCode == 200) {
-        final result = jsonDecode(response.body);
-        Iterable list = result["results"];
-        final loadedMovies =
-            list.map((movie) => Movie.fromJson(movie)).toList();
-        _items = loadedMovies;
-       // print(_items.id);
         notifyListeners();
       }
     } catch (error) {

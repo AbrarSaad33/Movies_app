@@ -18,30 +18,21 @@ class UpComingScreenState extends State<UpComingMovieScreen> {
   var isInit = true;
   final List<Movie> movies = [];
 
-  var _isLoading = false;
+  var isLoading = false;
   void setState(fn) {
     if (mounted) super.setState(fn);
   }
-
-  // @override
-  // void initState() {
-  //   Future.delayed(Duration.zero).then((_){
-  //   Provider.of<MovieProviders>(context,listen: false).fetchAllMovies();
-  //   });
-  //   super.initState();
-
-  // }
 
   @override
   void didChangeDependencies() {
     if (isInit) {
       setState(() {
-        _isLoading = true;
+        isLoading = true;
       });
-Provider.of<MovieProviders>(context)
+      Provider.of<MovieProviders>(context)
           .fetchUpcomingMovies()
           .then((_) => setState(() {
-                _isLoading = false;
+                isLoading = false;
               }));
     }
     isInit = false;
@@ -54,26 +45,15 @@ Provider.of<MovieProviders>(context)
       appBar: AppBar(
         title: const Text('UPComing'),
         actions: [
-          // IconButton(
-          //   color: Theme.of(context).accentColor,
-          //   onPressed: () {
-          //     Navigator.of(context).pushNamed(FavoriteMovies.routeName);
-          //     setState(() {
-          //       _showFavoritesOnly = true;
-          //     });
-          //   },
-          //   icon: Icon(Icons.favorite),
-          // ),
           PopupMenuButton(
             onSelected: (selected) {
               setState(() {
                 if (selected == 0) {
-                 // _showFavoritesOnly = false;
+                  // _showFavoritesOnly = false;
                   Navigator.of(context)
                       .pushNamed(MoviesOverviewScreen.routeName);
-                } 
-                else if(selected==1){
-                   Navigator.of(context)
+                } else if (selected == 1) {
+                  Navigator.of(context)
                       .pushNamed(TopRatedMovieScreen.routeName);
                 }
               });

@@ -6,6 +6,7 @@ import 'package:moives_app/widgets/movie_grid.dart';
 class FavoriteMovies extends StatelessWidget {
    static const routeName = '/favorite_movies';
   var _showFavoritesOnly = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
