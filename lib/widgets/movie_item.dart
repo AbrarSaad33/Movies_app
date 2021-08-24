@@ -5,7 +5,12 @@ import '../providers/movie.dart';
 import '../screens/movie_detail.dart';
 import 'package:provider/provider.dart';
 
-class MovieItem extends StatelessWidget {
+class MovieItem extends StatefulWidget {
+  @override
+  _MovieItemState createState() => _MovieItemState();
+}
+
+class _MovieItemState extends State<MovieItem> {
   @override
   Widget build(BuildContext context) {
     final loadedMovie = Provider.of<Movie>(context, listen: false);

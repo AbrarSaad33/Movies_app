@@ -1,8 +1,6 @@
-
-
 import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:moives_app/providers/movie.dart';
 import 'package:moives_app/providers/movie_provider.dart';
 import 'package:moives_app/providers/auth_provider.dart';
 import 'package:moives_app/screens/Auth_screen.dart';
@@ -20,15 +18,13 @@ HttpOverrides.global = new MyHttpOverrides();
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
-  bool load = false;
+  //bool load = false;
 
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-     
         ChangeNotifierProvider.value(
           value: MovieProviders(),
         ),

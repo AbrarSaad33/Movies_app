@@ -9,6 +9,7 @@ class Movie with ChangeNotifier {
   final String description;
   final String image;
   final double rate;
+  final String releaseDate;
   bool isFavorite;
 
   Movie(
@@ -17,6 +18,7 @@ class Movie with ChangeNotifier {
       required this.description,
       required this.image,
       required this.rate,
+      required this.releaseDate,
       this.isFavorite = false});
   factory Movie.fromJson(Map<String, dynamic> json) {
     return Movie(
@@ -25,6 +27,7 @@ class Movie with ChangeNotifier {
       title: json["title"] as String,
       id: json["id"].toString(),
       rate: json["vote_average"].toDouble(),
+      releaseDate:json["release_date"]
       //  isFavorite:  json['isFavorite']as bool
     );
   }
@@ -54,12 +57,4 @@ class Movie with ChangeNotifier {
       _setFavValue(oldStatus);
     }
   }
-
-  // Future<void> fetch(String token, String userId) async {
-  //   final url = Uri.parse(
-  //       'https://movieapp-14a99-default-rtdb.firebaseio.com/userFavorites/$userId/$id.json?auth=$token');
-  //   final response = await http.get(url);
-  //   final result = json.decode(response.body);
-  //   print(result);
-  // }
 }

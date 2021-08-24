@@ -37,6 +37,8 @@ class _MoviesOverviewScreenState extends State<MoviesOverviewScreen> {
           .then((_) => setState(() {
                 _isLoading = false;
               }));
+
+          
     }
     isInit = false;
     super.didChangeDependencies();

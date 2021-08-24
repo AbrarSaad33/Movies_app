@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:moives_app/providers/auth_provider.dart';
 import 'package:moives_app/providers/movie_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 class MovieDetail extends StatefulWidget {
   static const routeName = '/movie_detail';
@@ -53,9 +54,22 @@ class _MovieDetailState extends State<MovieDetail> {
             delegate: SliverChildListDelegate(
               [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
+                      SizedBox(height: 20),
+                Container(
+                      margin: EdgeInsets.only(left: 10),
+                      child: Text('Release Date:',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
+                      alignment: Alignment.bottomLeft,
+                    ),
+                    
+                Container(
+                      margin: EdgeInsets.only(left: 10),
+                      child: Text(loadedMovie.releaseDate.toString(),style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
+                      alignment: Alignment.topLeft,
+                    ),
                     Container(
+                      margin: EdgeInsets.only(left: 30),
                         alignment: Alignment.bottomRight,
                         child: IconButton(
                           icon: Icon(
@@ -99,9 +113,11 @@ class _MovieDetailState extends State<MovieDetail> {
                     softWrap: true,
                   ),
                 ),
+                
                 SizedBox(
                   height: 800,
-                )
+                ),
+                
               ],
             ),
           )

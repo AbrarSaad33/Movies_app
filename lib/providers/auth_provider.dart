@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
  import 'package:shared_preferences/shared_preferences.dart';
+ import 'movie.dart';
 
 class Auth with ChangeNotifier {
   String _token = '';
@@ -118,6 +119,13 @@ class Auth with ChangeNotifier {
     _authTimer = Timer(Duration(seconds: timeExpiry), logout);
     print(_authTimer);
   }
+  // Future<void> fetch(String token, String userId) async {
+  //   final url = Uri.parse(
+  //       'https://movieapp-14a99-default-rtdb.firebaseio.com/userFavorites/$userId/$Movie.id.json?auth=$token');
+  //   final response = await http.get(url);
+  //   final result = json.decode(response.body);
+  //   print(result);
+  // }
 
 
 }
