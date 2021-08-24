@@ -269,12 +269,13 @@ class _AuthCardState extends State<AuthCard>
                           onFieldSubmitted: (_) {
                             FocusScope.of(context).requestFocus(phoneFocusNode);
                           },
-                          validator: (value) {
-                            if (value!.isEmpty || value.length < 5) {
-                              return 'Invalid name!';
-                            }
-                            return null;
-                          },
+                          validator: (value) =>
+                            value!.isEmpty
+                        ? 'Enter Your Name'
+                        : RegExp(r'[!@#<>?":_`~;[\]\\|=+)(*&^%0-9-]').hasMatch(value)
+                            ? 'Enter a Valid Name'
+                            : null,
+                          
                           onSaved: (value) {
                             _authData['name'] = value!;
                           },
