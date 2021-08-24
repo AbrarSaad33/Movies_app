@@ -17,10 +17,7 @@ class AuthScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     AuthMode _authMode = AuthMode.Login;
     final deviceSize = MediaQuery.of(context).size;
-    // final transformConfig = Matrix4.rotationZ(-8 * pi / 180);
-    // transformConfig.translate(-10.0);
     return Scaffold(
-      // resizeToAvoidBottomInset: false,
       body: Stack(
         children: <Widget>[
           Container(
@@ -61,9 +58,7 @@ class AuthScreen extends StatelessWidget {
 }
 
 class AuthCard extends StatefulWidget {
-  // const AuthCard({
-  //   required Key key,
-  // }) : super(key: key);
+ 
 
   @override
   _AuthCardState createState() => _AuthCardState();
@@ -79,9 +74,10 @@ class _AuthCardState extends State<AuthCard>
   FocusNode emailFocusNode = FocusNode();
   var _isLoading = false;
   final _passwordController = TextEditingController();
+    final _emailController = TextEditingController();
   late AnimationController _controller;
-  late Animation<Offset> _slideAnimation;
-  late Animation<double> _opacityuAnimation;
+  late Animation<Offset> slideAnimation;
+  late Animation<double> opacityuAnimation;
 
   AuthMode _authMode = AuthMode.Login;
 
@@ -99,10 +95,10 @@ class _AuthCardState extends State<AuthCard>
       vsync: this,
       duration: Duration(milliseconds: 300),
     );
-    _slideAnimation = Tween<Offset>(begin: Offset(0, -1.5), end: Offset(0, 0))
+    slideAnimation = Tween<Offset>(begin: Offset(0, -1.5), end: Offset(0, 0))
         .animate(
             CurvedAnimation(parent: _controller, curve: Curves.fastOutSlowIn));
-    _opacityuAnimation = Tween(begin: 0.0, end: 1.0)
+    opacityuAnimation = Tween(begin: 0.0, end: 1.0)
         .animate(CurvedAnimation(parent: _controller, curve: Curves.easeIn));
   }
 
@@ -138,6 +134,7 @@ class _AuthCardState extends State<AuthCard>
   }
 
   Future<void> _submit() async {
+    FocusScope.of(context).unfocus();
     if (!_formKey.currentState!.validate()) {
       // Invalid!
       return;
@@ -186,20 +183,6 @@ class _AuthCardState extends State<AuthCard>
       _isLoading = false;
     });
   }
-
-  // void _switchAuthMode() {
-  //   if (_authMode == AuthMode.Login) {
-  //     setState(() {
-  //       _authMode = AuthMode.Signup;
-  //     });
-  //     _controller.forward();
-  //   } else {
-  //     setState(() {
-  //       _authMode = AuthMode.Login;
-  //     });
-  //     _controller.reverse();
-  //   }
-  // }
   var currentFocus;
   unfocus() {
     currentFocus = FocusScope.of(context);
@@ -261,6 +244,7 @@ class _AuthCardState extends State<AuthCard>
                       ),
                       Expanded(
                         child: TextFormField(
+                          key: ValueKey('name'),
                           decoration: InputDecoration(
                               labelText: 'Name',
                               hintStyle: TextStyle(color: Colors.white)),
@@ -295,6 +279,7 @@ class _AuthCardState extends State<AuthCard>
                       ),
                       Expanded(
                         child: TextFormField(
+                          key: ValueKey('phone'),
                           decoration: InputDecoration(labelText: 'Phone'),
                           keyboardType: TextInputType.phone,
                           textInputAction: TextInputAction.next,
@@ -321,11 +306,13 @@ class _AuthCardState extends State<AuthCard>
                       padding: const EdgeInsets.only(right: 16),
                       child: Icon(
                         Icons.email,
-                        // color: kPrimaryColor,
+
                       ),
                     ),
                     Expanded(
                       child: TextFormField(
+                        controller:_emailController,
+                        key: ValueKey('email'),
                         decoration: InputDecoration(labelText: 'E-Mail'),
                         keyboardType: TextInputType.emailAddress,
                         textInputAction: TextInputAction.next,
@@ -357,6 +344,7 @@ class _AuthCardState extends State<AuthCard>
                     ),
                     Expanded(
                       child: TextFormField(
+                        key: ValueKey('password'),
                         decoration: InputDecoration(labelText: 'Password'),
                         obscureText: true,
                         focusNode: passwordFocusNode,
@@ -387,7 +375,6 @@ class _AuthCardState extends State<AuthCard>
                         padding: const EdgeInsets.only(right: 16),
                         child: Icon(
                           Icons.lock_outline,
-                          // color: kPrimaryColor,
                         ),
                       ),
                       Expanded(
