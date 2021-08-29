@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:moives_app/providers/movie.dart';
 import 'package:http/http.dart' as http;
+import 'package:moives_app/providers/videos.dart';
 
 class MovieProviders with ChangeNotifier {
   List<Movie> _items = [];
@@ -18,9 +19,9 @@ class MovieProviders with ChangeNotifier {
   //   _authToken = value;
   // }
 
-  // String? _userId;
-  // set userId(String userIdValue) {
-  //   _userId = userIdValue;
+  // String? MovieId;
+  // set userId(String MovieIdValue) {
+  //   MovieId = MovieIdValue;
   // }
 
   List<Movie> get favoriteItems {
@@ -29,10 +30,11 @@ class MovieProviders with ChangeNotifier {
 
   void addMovie() {}
   Movie findById(String id) {
-    return _items.firstWhere((movie) => movie.id == id);
+    return _items.firstWhere(
+      (movie) => movie.id == id,
+      //orElse: () => 'No matching color found' as Movie
+    );
   }
-
-  
 
   Future<void> fetchAllMovies() async {
     final url = Uri.parse(
@@ -41,7 +43,8 @@ class MovieProviders with ChangeNotifier {
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
-        final result = jsonDecode(response.body);
+        final result = json.decode(response.body);
+        // print(result);
         Iterable list = result["results"];
 
         final loadedMovies =
@@ -86,6 +89,30 @@ class MovieProviders with ChangeNotifier {
             list.map((movie) => Movie.fromJson(movie)).toList();
         _items = loadedMovies;
         notifyListeners();
+      }
+    } catch (error) {
+      throw Exception("Failed to load movies!");
+    }
+  }
+   List<Videos> videoItems = [];
+  Future<void> fetchVideos(String movieId) async {
+    
+    var url = Uri.parse(
+        "http://api.themoviedb.org/3/movie/$movieId/videos?api_key=5b12e705c1ab3a4385c6d4bcd63ad3a7");
+    try {
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        final result = jsonDecode(response.body);
+        print(result);
+
+        Iterable list = result["results"];
+        final loadedMovies =
+            list.map((video) => Videos.fetchKeyfromJson(video)).toList();
+        videoItems = loadedMovies;
+       
+        notifyListeners();
+        print(loadedMovies);
       }
     } catch (error) {
       throw Exception("Failed to load movies!");

@@ -3,7 +3,7 @@ import 'package:moives_app/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'Auth_screen.dart';
-import 'movies_overview.dart';
+import 'movies_overviewScreen.dart';
 
 class Start extends StatelessWidget {
   static const routeName = '/start';
@@ -52,8 +52,9 @@ class Start extends StatelessWidget {
                                     builder: (ctx, authResultSnapShot) =>
                                         authResultSnapShot.connectionState ==
                                                 ConnectionState.waiting
-                                            ? Text('Loading...')
-                                            : AuthScreen());
+                                            ?Scaffold(body: Center(child: CircularProgressIndicator(),))
+                                            :
+                                             AuthScreen());
                           },
                         ));
                       },

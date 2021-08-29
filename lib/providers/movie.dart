@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:moives_app/providers/movie_provider.dart';
 
 class Movie with ChangeNotifier {
   final String id;
@@ -10,6 +11,7 @@ class Movie with ChangeNotifier {
   final String image;
   final double rate;
   final String releaseDate;
+ 
   bool isFavorite;
 
   Movie(
@@ -19,19 +21,21 @@ class Movie with ChangeNotifier {
       required this.image,
       required this.rate,
       required this.releaseDate,
+    
       this.isFavorite = false});
   factory Movie.fromJson(Map<String, dynamic> json) {
     return Movie(
-      image: json["poster_path"] as String,
-      description: json["overview"] as String,
-      title: json["title"] as String,
-      id: json["id"].toString(),
-      rate: json["vote_average"].toDouble(),
-      releaseDate:json["release_date"]
-      //  isFavorite:  json['isFavorite']as bool
-    );
+        image: json["poster_path"] as String,
+        description: json["overview"] as String,
+        title: json["title"] as String,
+        id: json["id"].toString(),
+        rate: json["vote_average"].toDouble(),
+        releaseDate: json["release_date"],
+       
+        //  isFavorite:  json['isFavorite']as bool
+        );
   }
-
+  
   void _setFavValue(bool newValue) {
     isFavorite = newValue;
     notifyListeners();
@@ -39,6 +43,7 @@ class Movie with ChangeNotifier {
 
   Future<void> toggleFavoriteStatus(String token, String userId) async {
     final oldStatus = isFavorite;
+    
     isFavorite = !isFavorite;
     notifyListeners();
     final url = Uri.parse(
@@ -57,4 +62,6 @@ class Movie with ChangeNotifier {
       _setFavValue(oldStatus);
     }
   }
+
+
 }

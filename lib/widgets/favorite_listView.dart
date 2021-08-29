@@ -13,11 +13,6 @@ class FavoriteListView extends StatelessWidget {
     final movies = showFavs ? movieData.favoriteItems : movieData.items;
     return ListView.builder(
       padding: const EdgeInsets.all(10),
-      // gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-      //     crossAxisCount: 2,
-      //     childAspectRatio: 3 / 2,
-      //     crossAxisSpacing: 10,
-      //     mainAxisSpacing: 10),
       itemBuilder: (ctx, i) => ChangeNotifierProvider.value(
         value: movies[i],
         child: FavoriteItem(),

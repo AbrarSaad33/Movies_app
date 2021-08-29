@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:moives_app/providers/movie.dart';
 import 'package:moives_app/providers/movie_provider.dart';
-import 'package:moives_app/screens/movies_overview.dart';
-import 'package:moives_app/screens/upcominfg_movie_screen.dart';
+import 'package:moives_app/screens/movies_overviewScreen.dart';
+import 'package:moives_app/screens/upcoming_movie_screen.dart';
 import 'package:moives_app/widgets/app_drawer.dart';
 import '../widgets/movie_grid.dart';
 import 'package:provider/provider.dart';
@@ -46,48 +46,39 @@ class TopRatedMovieScreenState extends State<TopRatedMovieScreen> {
       appBar: AppBar(
         title: const Text('Top Rated Movies'),
         actions: [
-          // IconButton(
-          //   color: Theme.of(context).accentColor,
-          //   onPressed: () {
-          //     Navigator.of(context).pushNamed(FavoriteMovies.routeName);
+          // PopupMenuButton(
+          //   onSelected: (selected) {
           //     setState(() {
-          //       _showFavoritesOnly = true;
+          //       if (selected == 0) {
+          //        Navigator.of(context)
+          //             .pushNamed(MoviesOverviewScreen.routeName);
+          //         Navigator.of(context)
+          //             .pushNamed(MoviesOverviewScreen.routeName);
+          //       } else if (selected == 2) {
+          //         Navigator.of(context)
+          //             .pushNamed(UpComingMovieScreen.routeName);
+          //       }
           //     });
           //   },
-          //   icon: Icon(Icons.favorite),
+          //   icon: Icon(Icons.more_vert),
+          //   itemBuilder: (ctx) => [
+          //     PopupMenuItem(
+          //       child: Text('All'),
+          //       value: 0,
+          //     ),
+          //     PopupMenuItem(
+          //       child: Text('Top Rated'),
+          //       value: 1,
+          //     ),
+          //     PopupMenuItem(
+          //       child: Text('UpComing'),
+          //       value: 2,
+          //     ),
+          //   ],
           // ),
-          PopupMenuButton(
-            onSelected: (selected) {
-              setState(() {
-                if (selected == 0) {
-                  // _showFavoritesOnly = false;
-                  Navigator.of(context)
-                      .pushNamed(MoviesOverviewScreen.routeName);
-                } else if (selected == 2) {
-                  Navigator.of(context)
-                      .pushNamed(UpComingMovieScreen.routeName);
-                }
-              });
-            },
-            icon: Icon(Icons.more_vert),
-            itemBuilder: (ctx) => [
-              PopupMenuItem(
-                child: Text('All'),
-                value: 0,
-              ),
-              PopupMenuItem(
-                child: Text('Top Rated'),
-                value: 1,
-              ),
-              PopupMenuItem(
-                child: Text('UpComing'),
-                value: 2,
-              ),
-            ],
-          ),
         ],
       ),
-      drawer: AppDrawer(),
+     drawer: AppDrawer(),
       body: MovieGrid(_showFavoritesOnly),
     );
   }

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:moives_app/providers/movie.dart';
 import 'package:moives_app/providers/movie_provider.dart';
-import 'package:moives_app/screens/movies_overview.dart';
-import 'package:moives_app/screens/top_rated.dart';
 import 'package:moives_app/widgets/app_drawer.dart';
 import '../widgets/movie_grid.dart';
 import 'package:provider/provider.dart';
@@ -45,35 +43,35 @@ class UpComingScreenState extends State<UpComingMovieScreen> {
       appBar: AppBar(
         title: const Text('UPComing'),
         actions: [
-          PopupMenuButton(
-            onSelected: (selected) {
-              setState(() {
-                if (selected == 0) {
-                  // _showFavoritesOnly = false;
-                  Navigator.of(context)
-                      .pushNamed(MoviesOverviewScreen.routeName);
-                } else if (selected == 1) {
-                  Navigator.of(context)
-                      .pushNamed(TopRatedMovieScreen.routeName);
-                }
-              });
-            },
-            icon: Icon(Icons.more_vert),
-            itemBuilder: (ctx) => [
-              PopupMenuItem(
-                child: Text('All'),
-                value: 0,
-              ),
-              PopupMenuItem(
-                child: Text('Top Rated'),
-                value: 1,
-              ),
-              PopupMenuItem(
-                child: Text('UPComing'),
-                value: 2,
-              ),
-            ],
-          ),
+          // PopupMenuButton(
+          //   onSelected: (selected) {
+          //     setState(() {
+          //       if (selected == 0) {
+          //         // _showFavoritesOnly = false;
+          //         Navigator.of(context)
+          //             .pushNamed(MoviesOverviewScreen.routeName);
+          //       } else if (selected == 1) {
+          //         Navigator.of(context)
+          //             .pushNamed(TopRatedMovieScreen.routeName);
+          //       }
+          //     });
+          //   },
+          //   icon: Icon(Icons.more_vert),
+          //   itemBuilder: (ctx) => [
+          //     PopupMenuItem(
+          //       child: Text('All'),
+          //       value: 0,
+          //     ),
+          //     PopupMenuItem(
+          //       child: Text('Top Rated'),
+          //       value: 1,
+          //     ),
+          //     PopupMenuItem(
+          //       child: Text('UPComing'),
+          //       value: 2,
+          //     ),
+          //   ],
+          // ),
         ],
       ),
       drawer: AppDrawer(),

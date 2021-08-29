@@ -1,12 +1,12 @@
 import 'dart:io';
 
-
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:moives_app/providers/auth_provider.dart';
-import 'package:moives_app/screens/movies_overview.dart';
+import 'package:moives_app/screens/movies_overviewScreen.dart';
 import 'package:provider/provider.dart';
-
 
 enum AuthMode { Signup, Login }
 
@@ -58,8 +58,6 @@ class AuthScreen extends StatelessWidget {
 }
 
 class AuthCard extends StatefulWidget {
- 
-
   @override
   _AuthCardState createState() => _AuthCardState();
 }
@@ -74,10 +72,11 @@ class _AuthCardState extends State<AuthCard>
   FocusNode emailFocusNode = FocusNode();
   var _isLoading = false;
   final _passwordController = TextEditingController();
-    final _emailController = TextEditingController();
+  final _emailController = TextEditingController();
   late AnimationController _controller;
   late Animation<Offset> slideAnimation;
   late Animation<double> opacityuAnimation;
+  final TextEditingController controller = TextEditingController();
 
   AuthMode _authMode = AuthMode.Login;
 
@@ -115,6 +114,7 @@ class _AuthCardState extends State<AuthCard>
     // confirmPasswordFocusNode.dispose();
     // emailFocusNode.dispose();
     _controller.dispose();
+    controller.dispose();
     super.dispose();
   }
 
@@ -183,6 +183,7 @@ class _AuthCardState extends State<AuthCard>
       _isLoading = false;
     });
   }
+
   var currentFocus;
   unfocus() {
     currentFocus = FocusScope.of(context);
@@ -191,6 +192,22 @@ class _AuthCardState extends State<AuthCard>
       currentFocus.unfocus();
     }
   }
+
+//   String phoneNumber = '';
+//   String phoneIsoCode = '';
+
+//   String initialCountry = 'eg';
+//  PhoneNumber number = PhoneNumber(isoCode: 'EG');
+
+
+//   void getPhoneNumber(String phoneNumber) async {
+//     PhoneNumber number =
+//         await PhoneNumber.getRegionInfoFromPhoneNumber(phoneNumber, 'EG');
+
+//     setState(() {
+//       this.number = number;
+//     });
+//   }
 
   @override
   Widget build(BuildContext context) {
@@ -232,6 +249,11 @@ class _AuthCardState extends State<AuthCard>
                     )
                   ],
                 ),
+CircleAvatar(backgroundImage: NetworkImage('https://images.unsplash.com/photo-1549492423-400259a2e574?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8ZnJlZSUyMHBpY3xlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000&q=80'),),
+
+FlatButton(onPressed: (){
+
+}, child:Text('Picke image')),
                 if (_authMode == AuthMode.Signup)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -253,13 +275,12 @@ class _AuthCardState extends State<AuthCard>
                           onFieldSubmitted: (_) {
                             FocusScope.of(context).requestFocus(phoneFocusNode);
                           },
-                          validator: (value) =>
-                            value!.isEmpty
-                        ? 'Enter Your Name'
-                        : RegExp(r'[!@#<>?":_`~;[\]\\|=+)(*&^%0-9-]').hasMatch(value)
-                            ? 'Enter a Valid Name'
-                            : null,
-                          
+                          validator: (value) => value!.isEmpty
+                              ? 'Enter Your Name'
+                              : RegExp(r'[!@#<>?":_`~;[\]\\|=+)(*&^%0-9-]')
+                                      .hasMatch(value)
+                                  ? 'Enter a Valid Name'
+                                  : null,
                           onSaved: (value) {
                             _authData['name'] = value!;
                           },
@@ -268,50 +289,79 @@ class _AuthCardState extends State<AuthCard>
                     ],
                   ),
                 if (_authMode == AuthMode.Signup)
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(right: 16),
-                        child: Icon(
-                          Icons.phone,
+                 
+                     Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.only(right: 16),
+                          child: Icon(
+                            Icons.phone,
+                          ),
                         ),
-                      ),
-                      Expanded(
-                        child: TextFormField(
-                          key: ValueKey('phone'),
-                          decoration: InputDecoration(labelText: 'Phone'),
-                          keyboardType: TextInputType.phone,
-                          textInputAction: TextInputAction.next,
-                          focusNode: phoneFocusNode,
-                          onFieldSubmitted: (_) {
-                            FocusScope.of(context).requestFocus(emailFocusNode);
-                          },
-                          validator: (value) {
-                            if (value!.isEmpty || value.length < 10) {
-                              return 'Invalid phone!';
-                            }
-                            return null;
-                          },
-                          onSaved: (value) {
-                            _authData['phone'] = value as String;
-                          },
+                        // Expanded(
+                        //   child: InternationalPhoneNumberInput(
+                        //     onInputChanged: (number) {
+                        //       print(number.phoneNumber);
+                        //     },
+                        //     onInputValidated: (bool value) {
+                        //       print(value);
+                        //     },
+                        //     selectorConfig: SelectorConfig(
+                        //       selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
+                        //     ),
+                        //     ignoreBlank: false,
+                        //     autoValidateMode: AutovalidateMode.disabled,
+                        //     selectorTextStyle: TextStyle(color: Colors.black),
+                        //     //initialValue: number,
+                        //     textFieldController: controller,
+                        //     formatInput: false,
+                        //     keyboardType: TextInputType.numberWithOptions(
+                        //         signed: true, decimal: true),
+                        //     inputBorder: OutlineInputBorder(),
+                        //     onSaved: (number) {
+                        //       print('On Saved: $number');
+                        //     },
+                        //   ),
+                        // ),
+                        Expanded(
+                          flex: 2,
+                          child: TextFormField(
+                            key: ValueKey('phone'),
+                            decoration: InputDecoration(labelText: 'Phone'),
+                            keyboardType: TextInputType.phone,
+                            textInputAction: TextInputAction.next,
+                            focusNode: phoneFocusNode,
+                            onFieldSubmitted: (_) {
+                              FocusScope.of(context)
+                                  .requestFocus(emailFocusNode);
+                            },
+                            validator: (value) {
+                              if (value!.isEmpty || value.length < 12|| value.length>12) {
+                                return 'Invalid phone!';
+                              }
+                              return null;
+                            },
+                            onSaved: (value) {
+                              _authData['phone'] = value as String;
+                            },
+                          ),
                         ),
-                      )
-                    ],
-                  ),
+                      ],
+                    ),
+                  
                 Row(
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(right: 16),
                       child: Icon(
                         Icons.email,
-
                       ),
                     ),
                     Expanded(
                       child: TextFormField(
-                        controller:_emailController,
+                        controller: _emailController,
                         key: ValueKey('email'),
                         decoration: InputDecoration(labelText: 'E-Mail'),
                         keyboardType: TextInputType.emailAddress,

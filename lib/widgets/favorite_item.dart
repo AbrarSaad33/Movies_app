@@ -27,8 +27,8 @@ class FavoriteItemState extends State<FavoriteItem> {
                 return Text('can\'t load image');
               },
               fit: BoxFit.cover,
-              width: 300,
-              height: 300,
+              width: 200,
+              height: 200,
             ),
           ),
           Container(
@@ -36,7 +36,8 @@ class FavoriteItemState extends State<FavoriteItem> {
               loadedMovie.title,
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 15,
+                fontSize: 20,
+                fontFamily: 'Anton'
               ),
               maxLines: 1,
             ),

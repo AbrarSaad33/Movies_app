@@ -25,6 +25,7 @@ class _MovieItemState extends State<MovieItem> {
           },
           child: Image.network(
             'https://image.tmdb.org/t/p/w500' + loadedMovie.image,
+            
             errorBuilder: (BuildContext context, Object exception,
                 StackTrace? stackTrace) {
               return Text('can\'t load image');
