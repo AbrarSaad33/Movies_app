@@ -5,8 +5,15 @@ import 'package:provider/provider.dart';
 import 'Auth_screen.dart';
 import 'movies_overviewScreen.dart';
 
-class Start extends StatelessWidget {
+class Start extends StatefulWidget {
   static const routeName = '/start';
+
+  @override
+  _StartState createState() => _StartState();
+}
+
+class _StartState extends State<Start> {
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +27,6 @@ class Start extends StatelessWidget {
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage('assets/images/start.jpg'),
-                     
                   fit: BoxFit.cover,
                 ),
               ),
@@ -46,15 +52,19 @@ class Start extends StatelessWidget {
                         Navigator.push(context, MaterialPageRoute(
                           builder: (context) {
                             return auth.isAuth
-                                ? MoviesOverviewScreen()
+                                ? 
+                                MoviesOverviewScreen()
                                 : FutureBuilder(
                                     future: auth.tryAutoLogin(),
                                     builder: (ctx, authResultSnapShot) =>
                                         authResultSnapShot.connectionState ==
                                                 ConnectionState.waiting
-                                            ?Scaffold(body: Center(child: CircularProgressIndicator(),))
-                                            :
-                                             AuthScreen());
+                                            ? Scaffold(
+                                                body: Center(
+                                                child:
+                                                    CircularProgressIndicator(),
+                                              ))
+                                            : AuthScreen());
                           },
                         ));
                       },

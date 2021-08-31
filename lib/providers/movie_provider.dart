@@ -6,23 +6,19 @@ import 'package:moives_app/providers/videos.dart';
 
 class MovieProviders with ChangeNotifier {
   List<Movie> _items = [];
-  //final String authToken ;
-  //final String userId ;
-
-  //MovieProviders(this.authToken, this.userId, this._items);
   List<Movie> get items {
     return [..._items];
   }
 
-  // String? _authToken;
-  // set authToken(String value) {
-  //   _authToken = value;
-  // }
+  String? _authToken;
+  set authToken(String value) {
+    _authToken = value;
+  }
 
-  // String? MovieId;
-  // set userId(String MovieIdValue) {
-  //   MovieId = MovieIdValue;
-  // }
+  String? _userId;
+  set userId(String userIdValue) {
+    _userId = userIdValue;
+  }
 
   List<Movie> get favoriteItems {
     return _items.where((movItem) => movItem.isFavorite).toList();
@@ -37,19 +33,35 @@ class MovieProviders with ChangeNotifier {
   }
 
   Future<void> fetchAllMovies() async {
-    final url = Uri.parse(
+    var url = Uri.parse(
         "http://api.themoviedb.org/3/movie/popular?api_key=5b12e705c1ab3a4385c6d4bcd63ad3a7");
     try {
       final response = await http.get(url);
-
       if (response.statusCode == 200) {
-        final result = json.decode(response.body);
+        final result = json.decode(response.body) as Map<String, dynamic>;
+        url = Uri.parse(
+            'https://movieapp-14a99-default-rtdb.firebaseio.com/userFavorites/$_userId.json?auth=$_authToken');
         // print(result);
-        Iterable list = result["results"];
-
-        final loadedMovies =
-            list.map((movie) => Movie.fromJson(movie)).toList();
+        final favoriteResponse = await http.get(url);
+        final favoriteData = json.decode(favoriteResponse.body);
+        List loaded = result["results"];
+        final List<Movie> loadedMovies = [];
+        loaded.forEach((movieData) {
+          loadedMovies.add(Movie(
+            id: movieData['id'].toString(),
+            title: movieData["title"] as String,
+            description: movieData["overview"] as String,
+            image: movieData["poster_path"] as String,
+            rate: movieData["vote_average"].toDouble(),
+            releaseDate: movieData["release_date"],
+            isFavorite: favoriteData == null
+                ? false
+                : favoriteData[movieData['id'].toString()] ?? false,
+          ));
+        });
+        print(loadedMovies);
         _items = loadedMovies;
+        print(_items);
         notifyListeners();
       }
     } catch (error) {
@@ -58,16 +70,36 @@ class MovieProviders with ChangeNotifier {
   }
 
   Future<void> fetchTopRatrdMovies() async {
-    final url = Uri.parse(
+   var url = Uri.parse(
         "http://api.themoviedb.org/3/movie/top_rated?api_key=5b12e705c1ab3a4385c6d4bcd63ad3a7");
     try {
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
         final result = jsonDecode(response.body);
-        Iterable list = result["results"];
-        final loadedMovies =
-            list.map((movie) => Movie.fromJson(movie)).toList();
+         url = Uri.parse(
+            'https://movieapp-14a99-default-rtdb.firebaseio.com/userFavorites/$_userId.json?auth=$_authToken');
+        // print(result);
+        final favoriteResponse = await http.get(url);
+        final favoriteData = json.decode(favoriteResponse.body);
+        List loaded = result["results"];
+        final List<Movie> loadedMovies = [];
+        loaded.forEach((movieData) {
+          loadedMovies.add(Movie(
+            id: movieData['id'].toString(),
+            title: movieData["title"] as String,
+            description: movieData["overview"] as String,
+            image: movieData["poster_path"] as String,
+            rate: movieData["vote_average"].toDouble(),
+            releaseDate: movieData["release_date"],
+            isFavorite: favoriteData == null
+                ? false
+                : favoriteData[movieData['id'].toString()] ?? false,
+          ));
+        });
+        // Iterable list = result["results"];
+        // final loadedMovies =
+        //     list.map((movie) => Movie.fromJson(movie)).toList();
         _items = loadedMovies;
         notifyListeners();
       }
@@ -77,16 +109,36 @@ class MovieProviders with ChangeNotifier {
   }
 
   Future<void> fetchUpcomingMovies() async {
-    final url = Uri.parse(
+    var url = Uri.parse(
         "http://api.themoviedb.org/3/movie/upcoming?api_key=5b12e705c1ab3a4385c6d4bcd63ad3a7");
     try {
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
         final result = jsonDecode(response.body);
-        Iterable list = result["results"];
-        final loadedMovies =
-            list.map((movie) => Movie.fromJson(movie)).toList();
+         url = Uri.parse(
+            'https://movieapp-14a99-default-rtdb.firebaseio.com/userFavorites/$_userId.json?auth=$_authToken');
+        // print(result);
+        final favoriteResponse = await http.get(url);
+        final favoriteData = json.decode(favoriteResponse.body);
+        List loaded = result["results"];
+        final List<Movie> loadedMovies = [];
+        loaded.forEach((movieData) {
+          loadedMovies.add(Movie(
+            id: movieData['id'].toString(),
+            title: movieData["title"] as String,
+            description: movieData["overview"] as String,
+            image: movieData["poster_path"] as String,
+            rate: movieData["vote_average"].toDouble(),
+            releaseDate: movieData["release_date"],
+            isFavorite: favoriteData == null
+                ? false
+                : favoriteData[movieData['id'].toString()] ?? false,
+          ));
+        });
+        // Iterable list = result["results"];
+        // final loadedMovies =
+        //     list.map((movie) => Movie.fromJson(movie)).toList();
         _items = loadedMovies;
         notifyListeners();
       }
@@ -94,9 +146,9 @@ class MovieProviders with ChangeNotifier {
       throw Exception("Failed to load movies!");
     }
   }
-   List<Videos> videoItems = [];
+
+  List<Videos> videoItems = [];
   Future<void> fetchVideos(String movieId) async {
-    
     var url = Uri.parse(
         "http://api.themoviedb.org/3/movie/$movieId/videos?api_key=5b12e705c1ab3a4385c6d4bcd63ad3a7");
     try {
@@ -110,7 +162,7 @@ class MovieProviders with ChangeNotifier {
         final loadedMovies =
             list.map((video) => Videos.fetchKeyfromJson(video)).toList();
         videoItems = loadedMovies;
-       
+
         notifyListeners();
         print(loadedMovies);
       }
@@ -118,4 +170,11 @@ class MovieProviders with ChangeNotifier {
       throw Exception("Failed to load movies!");
     }
   }
+
+  // fetchFavorite() async {
+  //   // final
+  //   ;
+  //   print(favoriteData);
+  //   print(_userId);
+  // }
 }

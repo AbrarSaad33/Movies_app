@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:moives_app/widgets/favorite_item.dart';
 import '../providers/movie_provider.dart';
-import './movie_item.dart';
 import 'package:provider/provider.dart';
 
 class FavoriteListView extends StatelessWidget {

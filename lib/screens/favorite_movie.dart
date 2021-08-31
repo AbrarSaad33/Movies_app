@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:moives_app/widgets/app_drawer.dart';
 import 'package:moives_app/widgets/favorite_listView.dart';
-
 
 class FavoriteMovies extends StatefulWidget {
   static const routeName = '/favorite_movies';
@@ -13,14 +11,16 @@ class FavoriteMovies extends StatefulWidget {
 
 class _FavoriteMoviesState extends State<FavoriteMovies> {
   var _showFavoritesOnly = true;
+  bool _isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Your Favorites Movies'),
       ),
-     // drawer: AppDrawer(),
-      body: FavoriteListView(_showFavoritesOnly),
+      // drawer: AppDrawer(),
+      body:  FavoriteListView(_showFavoritesOnly),
     );
   }
 }

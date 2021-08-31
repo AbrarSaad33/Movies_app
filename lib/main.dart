@@ -1,8 +1,7 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:moives_app/providers/movie.dart';
 import 'package:moives_app/providers/movie_provider.dart';
 import 'package:moives_app/providers/auth_provider.dart';
+import 'package:moives_app/providers/videos.dart';
 import 'package:moives_app/screens/Auth_screen.dart';
 import 'package:moives_app/screens/favorite_movie.dart';
 import 'package:moives_app/screens/start.dart';
@@ -14,22 +13,28 @@ import 'package:provider/provider.dart';
 
 void main() {
 //HttpOverrides.global = new MyHttpOverrides();
+
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  //bool load = false;
-
-
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_)=>MovieProviders(),
+        ChangeNotifierProvider(create: (ctx) => Auth()),
+        ChangeNotifierProxyProvider<Auth, MovieProviders>(
+          create: (_) => MovieProviders(),
+          update: (ctx, auth, previousMovies) {
+            previousMovies!..authToken = auth.token;
+            previousMovies..userId = auth.userId;
+            print(previousMovies);
+            return previousMovies;
+          },
         ),
-        ChangeNotifierProvider.value(
-          value: Auth(),
-        )
+
+        // ChangeNotifierProvider(create: (_)=>Videos(key: key),
+        // ),
       ],
       child: Consumer<Auth>(
         builder: (ctx, auth, child) => MaterialApp(
@@ -39,7 +44,7 @@ class MyApp extends StatelessWidget {
               primarySwatch: Colors.amber,
               accentColor: Colors.black,
               fontFamily: 'Lato'),
-          home:Start(),
+          home: Start(),
           // MoviesOverviewScreen(),
           // auth.isAuth?MoviesOverviewScreen()
           //   :FutureBuilder(future: auth.tryAutoLogin(),builder: (ctx,authResultSnapShot)=>authResultSnapShot.connectionState==ConnectionState.waiting?Text('Loading...'): AuthScreen()) ,

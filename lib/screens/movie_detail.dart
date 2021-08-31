@@ -14,7 +14,7 @@ class MovieDetail extends StatefulWidget {
 }
 
 class _MovieDetailState extends State<MovieDetail> {
-  var _isLoading = false;
+  var isLoading = false;
   var isInit = true;
 
   void setState(fn) {
@@ -29,12 +29,12 @@ class _MovieDetailState extends State<MovieDetail> {
 
     if (isInit) {
       setState(() {
-        _isLoading = true;
+        isLoading = true;
       });
       Provider.of<MovieProviders>(context)
           .fetchVideos(loadedMovie.id)
           .then((_) => setState(() {
-                _isLoading = false;
+                isLoading = false;
               }));
     }
     isInit = false;
@@ -43,7 +43,7 @@ class _MovieDetailState extends State<MovieDetail> {
 
   @override
   Widget build(BuildContext context) {
-    final movie = Provider.of<MovieProviders>(context);
+  //  final movie = Provider.of<MovieProviders>(context);
     final movieId = ModalRoute.of(context)!.settings.arguments as String;
     final loadedMovie =
         Provider.of<MovieProviders>(context, listen: false).findById(movieId);

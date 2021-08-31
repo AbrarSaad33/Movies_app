@@ -38,8 +38,10 @@ class AppDrawer extends StatelessWidget {
           ),
           Divider(),
               ListTile(
+                
             leading: Icon(Icons.upcoming),
             title: Text('Upcoming'),
+            
             onTap: () {
               Navigator.of(context).pushNamed(UpComingMovieScreen.routeName);
              

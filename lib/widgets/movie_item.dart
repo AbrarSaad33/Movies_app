@@ -14,7 +14,7 @@ class _MovieItemState extends State<MovieItem> {
   @override
   Widget build(BuildContext context) {
     final loadedMovie = Provider.of<Movie>(context, listen: false);
-    final authData = Provider.of<Auth>(context);
+    final authData = Provider.of<Auth>(context,listen: false);
     return ClipRRect(
       borderRadius: BorderRadius.circular(15),
       child: GridTile(

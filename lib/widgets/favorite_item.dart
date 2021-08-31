@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:moives_app/providers/auth_provider.dart';
 import '../providers/movie.dart';
 import 'package:provider/provider.dart';
 
@@ -13,7 +12,7 @@ class FavoriteItemState extends State<FavoriteItem> {
   @override
   Widget build(BuildContext context) {
     final loadedMovie = Provider.of<Movie>(context, listen: false);
-    final authData = Provider.of<Auth>(context);
+    //final authData = Provider.of<Auth>(context);
     return Container(
       margin: EdgeInsets.all(10),
       child: ClipRRect(

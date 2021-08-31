@@ -5,6 +5,8 @@ import 'package:moives_app/widgets/app_drawer.dart';
 import '../widgets/movie_grid.dart';
 import 'package:provider/provider.dart';
 
+import 'favorite_movie.dart';
+
 class UpComingMovieScreen extends StatefulWidget {
   static const routeName = '/Up_Coming';
   @override
@@ -43,35 +45,14 @@ class UpComingScreenState extends State<UpComingMovieScreen> {
       appBar: AppBar(
         title: const Text('UPComing'),
         actions: [
-          // PopupMenuButton(
-          //   onSelected: (selected) {
-          //     setState(() {
-          //       if (selected == 0) {
-          //         // _showFavoritesOnly = false;
-          //         Navigator.of(context)
-          //             .pushNamed(MoviesOverviewScreen.routeName);
-          //       } else if (selected == 1) {
-          //         Navigator.of(context)
-          //             .pushNamed(TopRatedMovieScreen.routeName);
-          //       }
-          //     });
-          //   },
-          //   icon: Icon(Icons.more_vert),
-          //   itemBuilder: (ctx) => [
-          //     PopupMenuItem(
-          //       child: Text('All'),
-          //       value: 0,
-          //     ),
-          //     PopupMenuItem(
-          //       child: Text('Top Rated'),
-          //       value: 1,
-          //     ),
-          //     PopupMenuItem(
-          //       child: Text('UPComing'),
-          //       value: 2,
-          //     ),
-          //   ],
-          // ),
+          IconButton(
+            color:Theme.of(context).accentColor,
+            onPressed: () {
+              Navigator.of(context).pushNamed(FavoriteMovies.routeName);
+              _showFavoritesOnly = true;
+            },
+            icon: Icon(Icons.favorite),
+          ),
         ],
       ),
       drawer: AppDrawer(),

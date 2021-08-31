@@ -1,7 +1,4 @@
 import 'dart:io';
-
-import 'package:intl_phone_number_input/intl_phone_number_input.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:moives_app/providers/auth_provider.dart';
@@ -15,7 +12,7 @@ class AuthScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AuthMode _authMode = AuthMode.Login;
+   // AuthMode authMode = AuthMode.Login;
     final deviceSize = MediaQuery.of(context).size;
     return Scaffold(
       body: Stack(
@@ -249,11 +246,11 @@ class _AuthCardState extends State<AuthCard>
                     )
                   ],
                 ),
-CircleAvatar(backgroundImage: NetworkImage('https://images.unsplash.com/photo-1549492423-400259a2e574?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8ZnJlZSUyMHBpY3xlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000&q=80'),),
+// CircleAvatar(backgroundImage: NetworkImage('https://images.unsplash.com/photo-1549492423-400259a2e574?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8ZnJlZSUyMHBpY3xlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000&q=80'),),
 
-FlatButton(onPressed: (){
+// FlatButton(onPressed: (){
 
-}, child:Text('Picke image')),
+// }, child:Text('Picke image')),
                 if (_authMode == AuthMode.Signup)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

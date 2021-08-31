@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moives_app/providers/auth_provider.dart';
 import 'package:moives_app/providers/movie.dart';
 import 'package:moives_app/providers/movie_provider.dart';
 import 'package:moives_app/screens/favorite_movie.dart';
@@ -16,6 +17,7 @@ class _MoviesOverviewScreenState extends State<MoviesOverviewScreen> {
   var _showFavoritesOnly = false;
   var isInit = true;
   final List<Movie> movies = [];
+  final auth = Auth();
   int selected = 0;
 
   var _isLoading = false;
@@ -37,12 +39,14 @@ class _MoviesOverviewScreenState extends State<MoviesOverviewScreen> {
                 _isLoading = false;
               }));
     }
-   // _showFavoritesOnly = true;
     isInit = false;
     super.didChangeDependencies();
   }
 
-
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,23 +59,19 @@ class _MoviesOverviewScreenState extends State<MoviesOverviewScreen> {
             color: Theme.of(context).accentColor,
             onPressed: () {
               Navigator.of(context).pushNamed(FavoriteMovies.routeName);
-              setState(() {
-                _showFavoritesOnly = false;
-
-                print(_showFavoritesOnly);
-              });
             },
             icon: Icon(Icons.favorite),
           ),
-      
-            ],
-          ),
+        ],
+      ),
       drawer: AppDrawer(),
-      body: _isLoading
+      body: 
+      _isLoading
           ? Center(
               child: CircularProgressIndicator(),
             )
-          : MovieGrid(_showFavoritesOnly),
+          : 
+          MovieGrid(_showFavoritesOnly),
     );
   }
 }
