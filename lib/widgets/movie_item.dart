@@ -23,14 +23,16 @@ class _MovieItemState extends State<MovieItem> {
             Navigator.of(context)
                 .pushNamed(MovieDetail.routeName, arguments: loadedMovie.id);
           },
-          child: Image.network(
-            'https://image.tmdb.org/t/p/w500' + loadedMovie.image,
-            
-            errorBuilder: (BuildContext context, Object exception,
-                StackTrace? stackTrace) {
-              return Text('can\'t load image');
-            },
-            fit: BoxFit.cover,
+          child: Container(
+            child: Image.network(
+              'https://image.tmdb.org/t/p/w500' + loadedMovie.image,
+              
+              errorBuilder: (BuildContext context, Object exception,
+                  StackTrace? stackTrace) {
+                return Text('can\'t load image');
+              },
+              fit: BoxFit.cover,
+            ),
           ),
         ),
         footer: GridTileBar(

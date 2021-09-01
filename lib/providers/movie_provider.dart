@@ -4,6 +4,8 @@ import 'package:moives_app/providers/movie.dart';
 import 'package:http/http.dart' as http;
 import 'package:moives_app/providers/videos.dart';
 
+enum MOVIE_TYPE { TOP_RATED, UPCOMING, ALL }
+
 class MovieProviders with ChangeNotifier {
   List<Movie> _items = [];
   List<Movie> get items {
@@ -30,6 +32,18 @@ class MovieProviders with ChangeNotifier {
       (movie) => movie.id == id,
       //orElse: () => 'No matching color found' as Movie
     );
+  }
+
+  Future<void> fetchMovies(MOVIE_TYPE type) async {
+    switch (type) {
+      case MOVIE_TYPE.ALL:
+        return await fetchAllMovies();
+      case MOVIE_TYPE.TOP_RATED:
+        return await fetchTopRatrdMovies();
+      case MOVIE_TYPE.UPCOMING:
+        return await fetchUpcomingMovies();
+      default:
+    }
   }
 
   Future<void> fetchAllMovies() async {
@@ -70,14 +84,14 @@ class MovieProviders with ChangeNotifier {
   }
 
   Future<void> fetchTopRatrdMovies() async {
-   var url = Uri.parse(
+    var url = Uri.parse(
         "http://api.themoviedb.org/3/movie/top_rated?api_key=5b12e705c1ab3a4385c6d4bcd63ad3a7");
     try {
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
         final result = jsonDecode(response.body);
-         url = Uri.parse(
+        url = Uri.parse(
             'https://movieapp-14a99-default-rtdb.firebaseio.com/userFavorites/$_userId.json?auth=$_authToken');
         // print(result);
         final favoriteResponse = await http.get(url);
@@ -116,7 +130,7 @@ class MovieProviders with ChangeNotifier {
 
       if (response.statusCode == 200) {
         final result = jsonDecode(response.body);
-         url = Uri.parse(
+        url = Uri.parse(
             'https://movieapp-14a99-default-rtdb.firebaseio.com/userFavorites/$_userId.json?auth=$_authToken');
         // print(result);
         final favoriteResponse = await http.get(url);
@@ -170,11 +184,4 @@ class MovieProviders with ChangeNotifier {
       throw Exception("Failed to load movies!");
     }
   }
-
-  // fetchFavorite() async {
-  //   // final
-  //   ;
-  //   print(favoriteData);
-  //   print(_userId);
-  // }
 }

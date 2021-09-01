@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:moives_app/providers/auth_provider.dart';
-import 'package:moives_app/providers/movie.dart';
 import 'package:moives_app/providers/movie_provider.dart';
 import 'package:moives_app/screens/favorite_movie.dart';
 import 'package:moives_app/widgets/app_drawer.dart';
@@ -16,9 +14,7 @@ class MoviesOverviewScreen extends StatefulWidget {
 class _MoviesOverviewScreenState extends State<MoviesOverviewScreen> {
   var _showFavoritesOnly = false;
   var isInit = true;
-  final List<Movie> movies = [];
-  final auth = Auth();
-  int selected = 0;
+  MOVIE_TYPE selectes = MOVIE_TYPE.ALL;
 
   var _isLoading = false;
 
@@ -32,15 +28,31 @@ class _MoviesOverviewScreenState extends State<MoviesOverviewScreen> {
       setState(() {
         _isLoading = true;
       });
-
-      Provider.of<MovieProviders>(context)
-          .fetchAllMovies()
-          .then((_) => setState(() {
-                _isLoading = false;
-              }));
+      getData(MOVIE_TYPE.ALL);
+      //   if (selected == 0) {
+      //     Provider.of<MovieProviders>(context)
+      //         .fetchAllMovies()
+      //         .then((_) => setState(() {
+      //               _isLoading = false;
+      //             }));
+      //   } else if (selected == 1) {
+      //     Provider.of<MovieProviders>(context)
+      //         .fetchTopRatrdMovies()
+      //         // .then((_) => setState(() {
+      //               _isLoading = false;
+      //             }));
+      //   }
     }
     isInit = false;
     super.didChangeDependencies();
+  }
+
+  getData(MOVIE_TYPE selection) {
+    Provider.of<MovieProviders>(context, listen: false)
+        .fetchMovies(selection)
+        .then((_) => setState(() {
+              _isLoading = false;
+            }));
   }
 
   @override
@@ -48,13 +60,33 @@ class _MoviesOverviewScreenState extends State<MoviesOverviewScreen> {
     super.dispose();
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
-        title: const Text('MyMovie'),
+        title: Text("Movies"),
         actions: [
+          PopupMenuButton<MOVIE_TYPE>(
+              onSelected: (selected) {
+                getData(selected);
+              },
+              icon: Icon(Icons.more_vert),
+              itemBuilder: (_) => [
+                    PopupMenuItem(
+                      child: Text('All Movies'),
+                      value: MOVIE_TYPE.ALL,
+                    ),
+                    PopupMenuItem(
+                      child: Text('Top-Rated'),
+                      value: MOVIE_TYPE.TOP_RATED,
+                    ),
+                    PopupMenuItem(
+                      child: Text('UpComing'),
+                      value: MOVIE_TYPE.UPCOMING,
+                    )
+                  ]),
           IconButton(
             color: Theme.of(context).accentColor,
             onPressed: () {
@@ -65,13 +97,11 @@ class _MoviesOverviewScreenState extends State<MoviesOverviewScreen> {
         ],
       ),
       drawer: AppDrawer(),
-      body: 
-      _isLoading
+      body: _isLoading
           ? Center(
               child: CircularProgressIndicator(),
             )
-          : 
-          MovieGrid(_showFavoritesOnly),
+          : MovieGrid(_showFavoritesOnly),
     );
   }
 }
