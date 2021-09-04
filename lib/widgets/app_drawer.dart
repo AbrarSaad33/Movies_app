@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moives_app/providers/auth_provider.dart';
-import 'package:moives_app/screens/splash.dart';
+import 'package:moives_app/screens/splashScreen.dart';
 import 'package:provider/provider.dart';
 
 class AppDrawer extends StatelessWidget {

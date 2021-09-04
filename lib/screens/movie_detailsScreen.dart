@@ -1,3 +1,4 @@
+import 'package:moives_app/providers/movies_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -24,14 +25,13 @@ class _MovieDetailState extends State<MovieDetail> {
   @override
   void didChangeDependencies() {
     final movieId = ModalRoute.of(context)!.settings.arguments as String;
-    final loadedMovie =
-        Provider.of<MovieProviders>(context, listen: false).findById(movieId);
+    final loadedMovie = Provider.of<MoviesProviders>(context,listen: false).findById(movieId);
 
     if (isInit) {
       setState(() {
         isLoading = true;
       });
-      Provider.of<MovieProviders>(context)
+      Provider.of<MoviesProviders>(context)
           .fetchVideos(loadedMovie.id)
           .then((_) => setState(() {
                 isLoading = false;
@@ -43,10 +43,8 @@ class _MovieDetailState extends State<MovieDetail> {
 
   @override
   Widget build(BuildContext context) {
-  //  final movie = Provider.of<MovieProviders>(context);
     final movieId = ModalRoute.of(context)!.settings.arguments as String;
-    final loadedMovie =
-        Provider.of<MovieProviders>(context, listen: false).findById(movieId);
+    final loadedMovie = Provider.of<MoviesProviders>(context,listen: false).findById(movieId);
     final authData = Provider.of<Auth>(context);
 
     return Scaffold(
@@ -58,9 +56,12 @@ class _MovieDetailState extends State<MovieDetail> {
               IconButton(
                 color: Theme.of(context).accentColor,
                 onPressed: () {
+                  
                   setState(() {
-                    loadedMovie.toggleFavoriteStatus(
-                        authData.token, authData.userId);
+                    print(movieId);
+                    print(loadedMovie.isFavorite);
+                    loadedMovie.toggleFavoriteStatus(authData.userId,authData.token);
+                    print(loadedMovie.isFavorite);
                   });
                 },
                 icon: Icon(loadedMovie.isFavorite
@@ -171,7 +172,7 @@ class _MovieDetailState extends State<MovieDetail> {
                   ),
                 ),
                 SizedBox(height: 10),
-                Selector<MovieProviders, List<Videos>>(
+                Selector<MoviesProviders, List<Videos>>(
                     selector: (_, model) => model.videoItems,
                     builder: (context, videos, _) {
                       return Column(

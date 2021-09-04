@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:moives_app/providers/auth_provider.dart';
-import '../providers/movie.dart';
-import '../screens/movie_detail.dart';
+import 'package:moives_app/providers/movies_provider.dart';
+import '../providers/movie_provider.dart';
+import '../screens/movie_detailsScreen.dart';
 import 'package:provider/provider.dart';
 
 class MovieItem extends StatefulWidget {
@@ -14,7 +15,8 @@ class _MovieItemState extends State<MovieItem> {
   @override
   Widget build(BuildContext context) {
     final loadedMovie = Provider.of<Movie>(context, listen: false);
-    final authData = Provider.of<Auth>(context,listen: false);
+    final authData = Provider.of<Auth>(context, listen: false);
+   // final movie = Provider.of<MoviesProviders>(context);
     return ClipRRect(
       borderRadius: BorderRadius.circular(15),
       child: GridTile(
@@ -26,7 +28,6 @@ class _MovieItemState extends State<MovieItem> {
           child: Container(
             child: Image.network(
               'https://image.tmdb.org/t/p/w500' + loadedMovie.image,
-              
               errorBuilder: (BuildContext context, Object exception,
                   StackTrace? stackTrace) {
                 return Text('can\'t load image');
@@ -41,8 +42,10 @@ class _MovieItemState extends State<MovieItem> {
             builder: (ctx, mov, child) => IconButton(
               color: Theme.of(context).accentColor,
               onPressed: () {
+                print(loadedMovie.isFavorite);
                 loadedMovie.toggleFavoriteStatus(
-                    authData.token, authData.userId);
+                   authData.userId,authData.token);
+                     print(loadedMovie.isFavorite);
               },
               icon: Icon(
                 loadedMovie.isFavorite ? Icons.favorite : Icons.favorite_border,

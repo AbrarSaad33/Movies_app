@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:moives_app/providers/auth_provider.dart';
 import 'package:moives_app/screens/movies_overviewScreen.dart';
 import 'package:provider/provider.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:image_picker/image_picker.dart';
 
 enum AuthMode { Signup, Login }
 
@@ -12,9 +14,11 @@ class AuthScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-   // AuthMode authMode = AuthMode.Login;
+    // AuthMode authMode = AuthMode.Login;
     final deviceSize = MediaQuery.of(context).size;
     return Scaffold(
+      // resizeToAvoidBottomInset: false,
+
       body: Stack(
         children: <Widget>[
           Container(
@@ -32,19 +36,21 @@ class AuthScreen extends StatelessWidget {
               ),
             ),
           ),
-          SingleChildScrollView(
-            child: Container(
-              height: deviceSize.height,
-              width: deviceSize.width,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Flexible(
-                    flex: deviceSize.width > 600 ? 2 : 1,
-                    child: AuthCard(),
-                  ),
-                ],
+          SafeArea(
+            child: SingleChildScrollView(
+              child: Container(
+                height: deviceSize.height,
+                width: deviceSize.width,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Flexible(
+                      flex: deviceSize.width > 600 ? 2 : 1,
+                      child: AuthCard(),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -61,7 +67,6 @@ class AuthCard extends StatefulWidget {
 
 class _AuthCardState extends State<AuthCard>
     with SingleTickerProviderStateMixin {
-  static const routeName = '/auth';
   final GlobalKey<FormState> _formKey = GlobalKey();
   FocusNode phoneFocusNode = FocusNode();
   FocusNode passwordFocusNode = FocusNode();
@@ -106,12 +111,13 @@ class _AuthCardState extends State<AuthCard>
 
   @override
   void dispose() {
-    // phoneFocusNode.dispose();
-    // passwordFocusNode.dispose();
-    // confirmPasswordFocusNode.dispose();
-    // emailFocusNode.dispose();
+    phoneFocusNode.dispose();
+    passwordFocusNode.dispose();
+    confirmPasswordFocusNode.dispose();
+    emailFocusNode.dispose();
     _controller.dispose();
-    controller.dispose();
+    // controller.dispose();
+
     super.dispose();
   }
 
@@ -147,14 +153,16 @@ class _AuthCardState extends State<AuthCard>
             _authData['email'] as String,
             _authData['password'] as String,
             _authData['name'] as String,
-            _authData['phone'] as String);
+            _authData['phone'] as String,
+            );
       } else {
         // Sign user up
         await Provider.of<Auth>(context, listen: false).singup(
             _authData['email'] as String,
             _authData['password'] as String,
             _authData['name'] as String,
-            _authData['phone'] as String);
+            _authData['phone'] as String,
+            );
       }
       Navigator.of(context)
           .pushReplacementNamed(MoviesOverviewScreen.routeName);
@@ -193,49 +201,66 @@ class _AuthCardState extends State<AuthCard>
 //   String phoneNumber = '';
 //   String phoneIsoCode = '';
 
-//   String initialCountry = 'eg';
-//  PhoneNumber number = PhoneNumber(isoCode: 'EG');
+  String initialCountry = 'eg';
+  PhoneNumber number = PhoneNumber(isoCode: 'EG');
 
+  void getPhoneNumber(String phoneNumber) async {
+    PhoneNumber number =
+        await PhoneNumber.getRegionInfoFromPhoneNumber(phoneNumber, 'EG');
 
-//   void getPhoneNumber(String phoneNumber) async {
-//     PhoneNumber number =
-//         await PhoneNumber.getRegionInfoFromPhoneNumber(phoneNumber, 'EG');
-
-//     setState(() {
-//       this.number = number;
-//     });
-//   }
+    setState(() {
+      this.number = number;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
+
+    File? pickedImage;
+
+    void _pickImage() async {
+      final ImagePicker _picker = ImagePicker();
+      final pickedImageFile = await _picker.pickImage(
+          source: ImageSource.camera, imageQuality: 50, maxWidth: 150);
+      //final pickedImageFile = File(pickedImage.path)
+      setState(() {
+        pickedImage = File(pickedImageFile!.path);
+      });
+    }
+
     return AnimatedContainer(
       duration: Duration(milliseconds: 300),
       curve: Curves.easeIn,
       child: Container(
-        height: _authMode == AuthMode.Signup ? 450 : 350,
+        height: _authMode == AuthMode.Signup ? 700 : 350,
         constraints:
-            BoxConstraints(minHeight: _authMode == AuthMode.Signup ? 450 : 350),
+            BoxConstraints(minHeight: _authMode == AuthMode.Signup ? 700 : 350),
         width: deviceSize.width * 0.75,
         padding: EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: SingleChildScrollView(
+        child: SingleChildScrollView(
+          child: Form(
+            key: _formKey,
             child: Column(
               children: <Widget>[
                 SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    FlatButton(
-                        onPressed: () {
-                          setState(() {
-                            _authMode = AuthMode.Signup;
-                          });
-                        },
-                        child: Text('SIGN UP')),
+                    Container(
+                        child: FlatButton(
+                      onPressed: () {
+                        setState(() {
+                          TextStyle(
+                            decoration: TextDecoration.underline,
+                          );
+                          _authMode = AuthMode.Signup;
+                        });
+                      },
+                      child: Text('SIGN UP'),
+                    )),
                     FlatButton(
                       onPressed: () {
                         setState(() {
@@ -246,26 +271,40 @@ class _AuthCardState extends State<AuthCard>
                     )
                   ],
                 ),
-// CircleAvatar(backgroundImage: NetworkImage('https://images.unsplash.com/photo-1549492423-400259a2e574?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8ZnJlZSUyMHBpY3xlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000&q=80'),),
+                if (_authMode == AuthMode.Signup)
+                  Column(
+                    children: [
+                      CircleAvatar(
+                        backgroundImage: pickedImage != null
+                            ? FileImage(pickedImage!)
+                            : null,
+                      ),
 
-// FlatButton(onPressed: (){
-
-// }, child:Text('Picke image')),
+                      //   NetworkImage(
+                      //       'https://pbs.twimg.com/media/Ew7wqxjWEAYX7Db.jpg'),
+                      // ),
+                      SizedBox(
+                        height: 2,
+                      ),
+                      FlatButton(
+                          onPressed: _pickImage, child: Text('Pick your image'))
+                    ],
+                  ),
                 if (_authMode == AuthMode.Signup)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(right: 16),
-                        child: Icon(
-                          Icons.people,
-                        ),
-                      ),
                       Expanded(
                         child: TextFormField(
                           key: ValueKey('name'),
                           decoration: InputDecoration(
                               labelText: 'Name',
+                              prefixIcon: Icon(
+                                Icons.people,
+                                color: Colors.black,
+                              ),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0)),
                               hintStyle: TextStyle(color: Colors.white)),
                           keyboardType: TextInputType.name,
                           textInputAction: TextInputAction.next,
@@ -285,82 +324,78 @@ class _AuthCardState extends State<AuthCard>
                       ),
                     ],
                   ),
+                SizedBox(
+                  height: 10,
+                ),
                 if (_authMode == AuthMode.Signup)
-                 
-                     Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.only(right: 16),
-                          child: Icon(
-                            Icons.phone,
+                  Row(
+                    children: [
+                      Expanded(
+                        child: InternationalPhoneNumberInput(
+                          spaceBetweenSelectorAndTextField: 2,
+                          hintText: "phone number",
+                          key: ValueKey('phone'),
+                          onInputChanged: (number) {
+                            print(number.phoneNumber);
+                          },
+                          validator: (value) {
+                            String pattern = r'(^(?:[+0]9)?[1-9]{10,12}$)';
+                            RegExp regExp = new RegExp(pattern);
+
+                            if (value!.length == 0) {
+                              return 'Please enter mobile number';
+                            } else if (!regExp.hasMatch(value)) {
+                              return 'Please enter valid mobile number';
+                            }
+                          },
+                          selectorConfig: SelectorConfig(
+                            selectorType: PhoneInputSelectorType.DROPDOWN,
+                            setSelectorButtonAsPrefixIcon: true,
+                            leadingPadding: 20,
+                            useEmoji: true,
                           ),
-                        ),
-                        // Expanded(
-                        //   child: InternationalPhoneNumberInput(
-                        //     onInputChanged: (number) {
-                        //       print(number.phoneNumber);
-                        //     },
-                        //     onInputValidated: (bool value) {
-                        //       print(value);
-                        //     },
-                        //     selectorConfig: SelectorConfig(
-                        //       selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
-                        //     ),
-                        //     ignoreBlank: false,
-                        //     autoValidateMode: AutovalidateMode.disabled,
-                        //     selectorTextStyle: TextStyle(color: Colors.black),
-                        //     //initialValue: number,
-                        //     textFieldController: controller,
-                        //     formatInput: false,
-                        //     keyboardType: TextInputType.numberWithOptions(
-                        //         signed: true, decimal: true),
-                        //     inputBorder: OutlineInputBorder(),
-                        //     onSaved: (number) {
-                        //       print('On Saved: $number');
-                        //     },
-                        //   ),
-                        // ),
-                        Expanded(
-                          flex: 2,
-                          child: TextFormField(
-                            key: ValueKey('phone'),
-                            decoration: InputDecoration(labelText: 'Phone'),
-                            keyboardType: TextInputType.phone,
-                            textInputAction: TextInputAction.next,
-                            focusNode: phoneFocusNode,
-                            onFieldSubmitted: (_) {
-                              FocusScope.of(context)
-                                  .requestFocus(emailFocusNode);
-                            },
-                            validator: (value) {
-                              if (value!.isEmpty || value.length < 12|| value.length>12) {
-                                return 'Invalid phone!';
-                              }
-                              return null;
-                            },
-                            onSaved: (value) {
-                              _authData['phone'] = value as String;
-                            },
+                          autoValidateMode: AutovalidateMode.disabled,
+                          keyboardAction: TextInputAction.next,
+                          selectorTextStyle: TextStyle(color: Colors.black),
+                          initialValue: number,
+                          textFieldController: controller,
+                          formatInput: false,
+                          keyboardType: TextInputType.numberWithOptions(
+                              signed: true, decimal: true),
+                          inputBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
                           ),
+                           focusNode: phoneFocusNode,
+                          onSaved: (value) {
+                            _authData['phone'] = value .toString();
+                          },
+                          onFieldSubmitted: (_) {
+                            FocusScope.of(context).requestFocus(emailFocusNode);
+                          },
                         ),
-                      ],
-                    ),
-                  
+                      ),
+                    ],
+                  ),
+
+                
+                SizedBox(
+                  height: 10,
+                ),
                 Row(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 16),
-                      child: Icon(
-                        Icons.email,
-                      ),
-                    ),
                     Expanded(
                       child: TextFormField(
                         controller: _emailController,
                         key: ValueKey('email'),
-                        decoration: InputDecoration(labelText: 'E-Mail'),
+                        decoration: InputDecoration(
+                          labelText: 'E-Mail',
+                          prefixIcon: Icon(
+                            Icons.email,
+                            color: Colors.black,
+                          ),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0)),
+                        ),
                         keyboardType: TextInputType.emailAddress,
                         textInputAction: TextInputAction.next,
                         focusNode: emailFocusNode,
@@ -381,18 +416,23 @@ class _AuthCardState extends State<AuthCard>
                     )
                   ],
                 ),
+                SizedBox(
+                  height: 10,
+                ),
                 Row(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 16),
-                      child: Icon(
-                        Icons.lock,
-                      ),
-                    ),
                     Expanded(
                       child: TextFormField(
                         key: ValueKey('password'),
-                        decoration: InputDecoration(labelText: 'Password'),
+                        decoration: InputDecoration(
+                          labelText: 'Password',
+                          prefixIcon: Icon(
+                            Icons.lock,
+                            color: Colors.black,
+                          ),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0)),
+                        ),
                         obscureText: true,
                         focusNode: passwordFocusNode,
                         textInputAction: _authMode == AuthMode.Login
@@ -404,7 +444,9 @@ class _AuthCardState extends State<AuthCard>
                         },
                         controller: _passwordController,
                         validator: (value) {
-                          if (value!.isEmpty || value.length < 5) {
+                          if (value!.isEmpty) {
+                            return 'invalid Password ';
+                          } else if (value.length < 5) {
                             return 'Password is too short!';
                           }
                         },
@@ -415,20 +457,24 @@ class _AuthCardState extends State<AuthCard>
                     )
                   ],
                 ),
+                SizedBox(
+                  height: 10,
+                ),
                 if (_authMode == AuthMode.Signup)
                   Row(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: 16),
-                        child: Icon(
-                          Icons.lock_outline,
-                        ),
-                      ),
                       Expanded(
                         child: TextFormField(
                           enabled: _authMode == AuthMode.Signup,
-                          decoration:
-                              InputDecoration(labelText: 'Confirm Password'),
+                          decoration: InputDecoration(
+                            labelText: 'Confirm Password',
+                            prefixIcon: Icon(
+                              Icons.lock_outline,
+                              color: Colors.black,
+                            ),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10.0)),
+                          ),
                           obscureText: true,
                           textInputAction: TextInputAction.done,
                           focusNode: confirmPasswordFocusNode,
@@ -444,7 +490,7 @@ class _AuthCardState extends State<AuthCard>
                     ],
                   ),
                 SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
                 if (_isLoading)
                   CircularProgressIndicator()

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:moives_app/providers/movies_provider.dart';
 import 'package:moives_app/widgets/favorite_item.dart';
-import '../providers/movie_provider.dart';
 import 'package:provider/provider.dart';
 
 class FavoriteListView extends StatelessWidget {
@@ -8,7 +8,7 @@ class FavoriteListView extends StatelessWidget {
   FavoriteListView(this.showFavs);
   @override
   Widget build(BuildContext context) {
-    final movieData = Provider.of<MovieProviders>(context);
+    final movieData = Provider.of<MoviesProviders>(context);
     final movies = showFavs ? movieData.favoriteItems : movieData.items;
     return ListView.builder(
       padding: const EdgeInsets.all(10),
