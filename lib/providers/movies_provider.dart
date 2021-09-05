@@ -1,10 +1,8 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:moives_app/models/network.dart';
 import 'package:moives_app/providers/movie_provider.dart';
 
 import 'package:moives_app/models/videos.dart';
-
 
 enum MOVIE_TYPE { TOP_RATED, UPCOMING, ALL }
 
@@ -22,16 +20,6 @@ class MoviesProviders with ChangeNotifier {
   String? _userId;
   set userId(String userIdValue) {
     _userId = userIdValue;
-  }
-
-  String? _movieId;
-  set movieId(String userIdValue) {
-    _movieId = userIdValue;
-  }
-
-  bool? _isFavorite;
-  set isFavorite(bool userIdValue) {
-    _isFavorite = userIdValue;
   }
 
   List<Movie> get favoriteItems {
@@ -60,10 +48,13 @@ class MoviesProviders with ChangeNotifier {
     var url = Uri.parse(
         "http://api.themoviedb.org/3/movie/$moviesUrl?api_key=5b12e705c1ab3a4385c6d4bcd63ad3a7");
     final result = await Network().getMovie(url);
-    url = Uri.parse(
-        'https://movieapp-14a99-default-rtdb.firebaseio.com/userFavorites/$_userId.json?auth=$_authToken');
+    // url = Uri.parse(
+    //     'https://movieapp-14a99-default-rtdb.firebaseio.com/userFavorites/$_userId.json?auth=$_authToken');
     // print(result);
-    final favoriteData = await Network().getMovie(url);
+    final favoriteData = await Network().getMovie(Uri.parse(
+        'https://movieapp-14a99-default-rtdb.firebaseio.com/userFavorites/$_userId.json?auth=$_authToken'));
+   
+
     List loaded = result["results"];
     final List<Movie> loadedMovies = [];
     loaded.forEach((movieData) {
@@ -106,7 +97,7 @@ class MoviesProviders with ChangeNotifier {
     List list = result["results"];
     final List<Videos> loadedVideos = [];
     list.forEach((videoData) {
-      loadedVideos.add(Videos(key: videoData['key']as String));
+      loadedVideos.add(Videos(key: videoData['key'] as String));
     });
     videoItems = loadedVideos;
 

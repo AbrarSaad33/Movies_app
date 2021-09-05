@@ -31,7 +31,7 @@ class Movie with ChangeNotifier {
   //   );
   // }
 
-  void _setFavValue(bool newValue,bool isFavorite) {
+  void _setFavValue(bool newValue) {
     isFavorite = newValue;
     notifyListeners();
   }
@@ -51,13 +51,11 @@ class Movie with ChangeNotifier {
         ),
       );
       if (response.statusCode >= 400) {
-        _setFavValue(oldStatus,isFavorite);
+        _setFavValue(oldStatus);
       }
     } catch (error) {
-      _setFavValue(oldStatus,isFavorite);
+      _setFavValue(oldStatus);
     }
-  }
-
-   
+  } 
   
 }

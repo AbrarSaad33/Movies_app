@@ -11,16 +11,18 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
+
   @override
-  void dispose() {
-    FocusScope.of(context).unfocus();
-    super.dispose();
-  }
+  // void dispose() {
+  //   FocusScope.of(context).unfocus();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
     return Scaffold(
+  
         body: new GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Stack(
@@ -70,6 +72,7 @@ class AuthCard extends StatefulWidget {
 }
 
 class _AuthCardState extends State<AuthCard> {
+
   @override
   Widget build(BuildContext context) {
     // final auth = FirebaseAuth.instance;

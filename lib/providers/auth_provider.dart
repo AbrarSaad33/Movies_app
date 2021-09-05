@@ -41,7 +41,6 @@ class Auth with ChangeNotifier {
             'password': password,
             'name': name,
             'phone': phone,
-          
             'returnSecureToken': true
           }));
 

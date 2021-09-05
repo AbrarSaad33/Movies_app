@@ -67,7 +67,7 @@ class AuthFormState extends State<AuthForm>  with SingleTickerProviderStateMixin
     emailFocusNode.dispose();
     _controller.dispose();
     // controller.dispose();
-FocusScope.of(context).unfocus();
+
     super.dispose();
   }
 
