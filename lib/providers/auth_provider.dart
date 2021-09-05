@@ -65,7 +65,6 @@ class Auth with ChangeNotifier {
     } catch (error) {
       throw error;
     }
-    // print(json.decode(response.body));
   }
 
   Future<void> singup(

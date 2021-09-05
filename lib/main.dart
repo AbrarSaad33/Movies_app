@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:moives_app/providers/auth_provider.dart';
 import 'package:moives_app/providers/movies_provider.dart';
-import 'package:moives_app/screens/Auth_screen.dart';
-import 'package:moives_app/screens/favorite_movieScreen.dart';
-import 'package:moives_app/screens/splashScreen.dart';
-import 'screens/movie_detailsScreen.dart';
-import 'screens/movies_overviewScreen.dart';
+import 'package:moives_app/screens/auth_screen.dart';
+import 'package:moives_app/screens/favoriteMovie_screen.dart';
+import 'package:moives_app/screens/splash_screen.dart';
+import 'screens/movieDetails_screen.dart';
+import 'screens/moviesOverview_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() {

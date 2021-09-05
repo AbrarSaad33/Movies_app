@@ -1,10 +1,11 @@
 import 'package:moives_app/providers/movies_provider.dart';
+
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moives_app/providers/auth_provider.dart';
-import 'package:moives_app/providers/movie_provider.dart';
-import 'package:moives_app/providers/videos.dart';
+
+import 'package:moives_app/models/videos.dart';
 import 'package:provider/provider.dart';
 
 class MovieDetail extends StatefulWidget {

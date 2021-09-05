@@ -1,72 +1,22 @@
 import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:moives_app/providers/auth_provider.dart';
-import 'package:moives_app/screens/movies_overviewScreen.dart';
-import 'package:provider/provider.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+import 'package:moives_app/screens/moviesOverview_screen.dart';
 
 enum AuthMode { Signup, Login }
-
-class AuthScreen extends StatelessWidget {
-  static const routeName = '/auth';
+class AuthForm extends StatefulWidget {
 
   @override
-  Widget build(BuildContext context) {
-    // AuthMode authMode = AuthMode.Login;
-    final deviceSize = MediaQuery.of(context).size;
-    return Scaffold(
-      // resizeToAvoidBottomInset: false,
-
-      body: Stack(
-        children: <Widget>[
-          Container(
-            height: double.infinity,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Color.fromRGBO(215, 117, 255, 1).withOpacity(0.5),
-                  Color.fromRGBO(255, 188, 117, 1).withOpacity(0.9),
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                stops: [0, 1],
-              ),
-            ),
-          ),
-          SafeArea(
-            child: SingleChildScrollView(
-              child: Container(
-                height: deviceSize.height,
-                width: deviceSize.width,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Flexible(
-                      flex: deviceSize.width > 600 ? 2 : 1,
-                      child: AuthCard(),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  State<StatefulWidget> createState() => AuthFormState();
 }
 
-class AuthCard extends StatefulWidget {
-  @override
-  _AuthCardState createState() => _AuthCardState();
-}
-
-class _AuthCardState extends State<AuthCard>
-    with SingleTickerProviderStateMixin {
+class AuthFormState extends State<AuthForm>  with SingleTickerProviderStateMixin{
+  
   final GlobalKey<FormState> _formKey = GlobalKey();
   FocusNode phoneFocusNode = FocusNode();
   FocusNode passwordFocusNode = FocusNode();
@@ -117,7 +67,7 @@ class _AuthCardState extends State<AuthCard>
     emailFocusNode.dispose();
     _controller.dispose();
     // controller.dispose();
-
+FocusScope.of(context).unfocus();
     super.dispose();
   }
 
@@ -150,19 +100,19 @@ class _AuthCardState extends State<AuthCard>
       if (_authMode == AuthMode.Login) {
         // Log user in
         await Provider.of<Auth>(context, listen: false).singin(
-            _authData['email'] as String,
-            _authData['password'] as String,
-            _authData['name'] as String,
-            _authData['phone'] as String,
-            );
+          _authData['email'] as String,
+          _authData['password'] as String,
+          _authData['name'] as String,
+          _authData['phone'] as String,
+        );
       } else {
         // Sign user up
         await Provider.of<Auth>(context, listen: false).singup(
-            _authData['email'] as String,
-            _authData['password'] as String,
-            _authData['name'] as String,
-            _authData['phone'] as String,
-            );
+          _authData['email'] as String,
+          _authData['password'] as String,
+          _authData['name'] as String,
+          _authData['phone'] as String,
+        );
       }
       Navigator.of(context)
           .pushReplacementNamed(MoviesOverviewScreen.routeName);
@@ -198,9 +148,6 @@ class _AuthCardState extends State<AuthCard>
     }
   }
 
-//   String phoneNumber = '';
-//   String phoneIsoCode = '';
-
   String initialCountry = 'eg';
   PhoneNumber number = PhoneNumber(isoCode: 'EG');
 
@@ -212,23 +159,24 @@ class _AuthCardState extends State<AuthCard>
       this.number = number;
     });
   }
+ 
+
+
 
   @override
   Widget build(BuildContext context) {
-    final deviceSize = MediaQuery.of(context).size;
+     File? _image;
+      Future getImage() async {
+   final ImagePicker _picker = ImagePicker();
+    final  pickedImageFile = await _picker.pickImage(
+        source: ImageSource.camera);
 
-    File? pickedImage;
-
-    void _pickImage() async {
-      final ImagePicker _picker = ImagePicker();
-      final pickedImageFile = await _picker.pickImage(
-          source: ImageSource.camera, imageQuality: 50, maxWidth: 150);
-      //final pickedImageFile = File(pickedImage.path)
       setState(() {
-        pickedImage = File(pickedImageFile!.path);
+        _image = pickedImageFile as File;
+          print('Image Path $_image');
       });
     }
-
+    final deviceSize = MediaQuery.of(context).size;
     return AnimatedContainer(
       duration: Duration(milliseconds: 300),
       curve: Curves.easeIn,
@@ -275,19 +223,33 @@ class _AuthCardState extends State<AuthCard>
                   Column(
                     children: [
                       CircleAvatar(
-                        backgroundImage: pickedImage != null
-                            ? FileImage(pickedImage!)
-                            : null,
+                        maxRadius: 40,
+                        child: ClipOval(
+                          child: new SizedBox(
+                            width: 300.0,
+                            height: 300.0,
+                            child: (_image != null)
+                                ? Image.file(
+                                    _image!,
+                                    fit: BoxFit.fill,
+                                  )
+                                : Image.network(
+                                    "https://images.unsplash.com/photo-1502164980785-f8aa41d53611?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
+                                    fit: BoxFit.fill,
+                                  ),
+                          ),
+                        ),
                       ),
 
                       //   NetworkImage(
                       //       'https://pbs.twimg.com/media/Ew7wqxjWEAYX7Db.jpg'),
                       // ),
-                      SizedBox(
-                        height: 2,
-                      ),
-                      FlatButton(
-                          onPressed: _pickImage, child: Text('Pick your image'))
+
+                      FlatButton.icon(
+                        onPressed: getImage,
+                        icon: Icon(Icons.camera_alt),
+                        label: Text('Pick Your Pic'),
+                      )
                     ],
                   ),
                 if (_authMode == AuthMode.Signup)
@@ -331,9 +293,12 @@ class _AuthCardState extends State<AuthCard>
                   Row(
                     children: [
                       Expanded(
+                      
                         child: InternationalPhoneNumberInput(
-                          spaceBetweenSelectorAndTextField: 2,
-                          hintText: "phone number",
+                          selectorButtonOnErrorPadding: 50,
+                          selectorTextStyle: TextStyle(color: Colors.black,fontSize: 15),
+                          spaceBetweenSelectorAndTextField: 1,
+                          hintText: "PhoneNumber",
                           key: ValueKey('phone'),
                           onInputChanged: (number) {
                             print(number.phoneNumber);
@@ -349,14 +314,14 @@ class _AuthCardState extends State<AuthCard>
                             }
                           },
                           selectorConfig: SelectorConfig(
-                            selectorType: PhoneInputSelectorType.DROPDOWN,
+                            selectorType: PhoneInputSelectorType.DIALOG,
                             setSelectorButtonAsPrefixIcon: true,
                             leadingPadding: 20,
                             useEmoji: true,
                           ),
                           autoValidateMode: AutovalidateMode.disabled,
                           keyboardAction: TextInputAction.next,
-                          selectorTextStyle: TextStyle(color: Colors.black),
+                          
                           initialValue: number,
                           textFieldController: controller,
                           formatInput: false,
@@ -365,9 +330,9 @@ class _AuthCardState extends State<AuthCard>
                           inputBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.0),
                           ),
-                           focusNode: phoneFocusNode,
+                          focusNode: phoneFocusNode,
                           onSaved: (value) {
-                            _authData['phone'] = value .toString();
+                            _authData['phone'] = value.toString();
                           },
                           onFieldSubmitted: (_) {
                             FocusScope.of(context).requestFocus(emailFocusNode);
@@ -376,8 +341,6 @@ class _AuthCardState extends State<AuthCard>
                       ),
                     ],
                   ),
-
-                
                 SizedBox(
                   height: 10,
                 ),
