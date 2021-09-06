@@ -15,40 +15,13 @@ class AppDrawer extends StatelessWidget {
             title: Text('Hello'),
             automaticallyImplyLeading: false,
           ),
-          // Divider(),
-          // ListTile(
-          //   leading: Icon(Icons.movie),
-          //   title: Text('All Movies'),
-          //   onTap: () {
-          //     Navigator.of(context).pushNamed(MoviesOverviewScreen.routeName);
-             
-          //   },
-          // ),
-          //  Divider(),
-          //  ListTile(
-          //   leading: Icon(Icons.rate_review_rounded),
-          //   title: Text('Top Rated'),
-          //   onTap: () {
-          //     Navigator.of(context).pushNamed(TopRatedMovieScreen.routeName);
-             
-          //   },
-          // ),
-          // Divider(),
-          //     ListTile(
-                
-          //   leading: Icon(Icons.upcoming),
-          //   title: Text('Upcoming'),
-          //   onTap: () {
-          //     Navigator.of(context).pushNamed(UpComingMovieScreen.routeName);
-          //   },
-          // ),
+         
           Divider(),
           ListTile(
             leading: Icon(Icons.logout),
-            title: Text('LogOut'),
+            title: Text('Logout'),
             onTap: () {
-             // Navigator.of(context).pop();
-              Navigator.of(context).popAndPushNamed(SplashScreen.routeName);
+             Navigator.of(context).popAndPushNamed(SplashScreen.routeName);
               Provider.of<Auth>(context, listen: false).logout();
             },
           ),

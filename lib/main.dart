@@ -40,21 +40,15 @@ class MyApp extends StatelessWidget {
               accentColor: Colors.black,
               fontFamily: 'Lato'),
           home: SplashScreen(),
-          // MoviesOverviewScreen(),
-          // auth.isAuth?MoviesOverviewScreen()
-          //   :FutureBuilder(future: auth.tryAutoLogin(),builder: (ctx,authResultSnapShot)=>authResultSnapShot.connectionState==ConnectionState.waiting?Text('Loading...'): AuthScreen()) ,
-          //
           routes: {
             SplashScreen.routeName: (ctx) => SplashScreen(),
             AuthScreen.routeName: (ctx) => AuthScreen(),
-           MovieDetailScreen.routeName: (ctx) => MovieDetailScreen(),
+            MovieDetailScreen.routeName: (ctx) => MovieDetailScreen(),
             MoviesOverviewScreen.routeName: (ctx) => MoviesOverviewScreen(),
             FavoriteMovieScreen.routeName: (ctx) => FavoriteMovieScreen(),
-         
           },
         ),
       ),
     );
   }
 }
-

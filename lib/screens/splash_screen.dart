@@ -1,7 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:moives_app/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
-
+import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'auth_screen.dart';
 import 'movies_overview_screen.dart';
 
@@ -17,7 +19,27 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+     final auth = Provider.of<Auth>(context, listen: false);
+     Timer(
+            Duration(seconds: 3),
+                () =>
+            Navigator.of(context).pushReplacement(MaterialPageRoute(
+                builder: (BuildContext context) => auth.isAuth
+                                ? 
+                                MoviesOverviewScreen()
+                                : FutureBuilder(
+                                    future: auth.tryAutoLogin(),
+                                    builder: (ctx, authResultSnapShot) =>
+                                        authResultSnapShot.connectionState ==
+                                                ConnectionState.waiting
+                                            ? Scaffold(
+                                                body: Center(
+                                                child:
+                                                    CircularProgressIndicator(),
+                                              ))
+                                            : AuthScreen()))));
     return Scaffold(
+
       body: Column(
         children: <Widget>[
           Expanded(
@@ -46,29 +68,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     ),
                   ),
                   FittedBox(
-                    child: GestureDetector(
-                      onTap: () {
-                        final auth = Provider.of<Auth>(context, listen: false);
-                        Navigator.push(context, MaterialPageRoute(
-                          builder: (context) {
-                            return auth.isAuth
-                                ? 
-                                MoviesOverviewScreen()
-                                : FutureBuilder(
-                                    future: auth.tryAutoLogin(),
-                                    builder: (ctx, authResultSnapShot) =>
-                                        authResultSnapShot.connectionState ==
-                                                ConnectionState.waiting
-                                            ? Scaffold(
-                                                body: Center(
-                                                child:
-                                                    CircularProgressIndicator(),
-                                              ))
-                                            : AuthScreen());
-                          },
-                        ));
-                      },
-                      child: Container(
+                    child: Container(
                         margin: EdgeInsets.only(bottom: 25, top: 20),
                         padding:
                             EdgeInsets.symmetric(horizontal: 26, vertical: 10),
@@ -79,22 +79,22 @@ class _SplashScreenState extends State<SplashScreen> {
                         child: Row(
                           children: <Widget>[
                             Text(
-                              "START ",
+                              "Start ...... ",
                               style:
                                   Theme.of(context).textTheme.button!.copyWith(
                                         color: Colors.black,
                                       ),
                             ),
-                            SizedBox(width: 10),
-                            Icon(
-                              Icons.arrow_forward,
-                              color: Colors.black,
-                            )
+                            // SizedBox(width: 10),
+                            // Icon(
+                            //   Icons.arrow_forward,
+                            //   color: Colors.black,
+                            // )
                           ],
                         ),
                       ),
                     ),
-                  ),
+         
                 ],
               ),
             ),
