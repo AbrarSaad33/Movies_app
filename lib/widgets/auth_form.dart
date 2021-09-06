@@ -165,17 +165,17 @@ class AuthFormState extends State<AuthForm>  with SingleTickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
-     File? _image;
-      Future getImage() async {
-   final ImagePicker _picker = ImagePicker();
-    final  pickedImageFile = await _picker.pickImage(
-        source: ImageSource.camera);
+  //    File? _image;
+  //     Future getImage() async {
+  //  final ImagePicker _picker = ImagePicker();
+  //   final  pickedImageFile = await _picker.pickImage(
+  //       source: ImageSource.camera);
 
-      setState(() {
-        _image = pickedImageFile as File;
-          print('Image Path $_image');
-      });
-    }
+  //     setState(() {
+  //       _image = pickedImageFile as File;
+  //         print('Image Path $_image');
+  //     });
+  //   }
     final deviceSize = MediaQuery.of(context).size;
     return AnimatedContainer(
       duration: Duration(milliseconds: 300),
@@ -219,39 +219,39 @@ class AuthFormState extends State<AuthForm>  with SingleTickerProviderStateMixin
                     )
                   ],
                 ),
-                if (_authMode == AuthMode.Signup)
-                  Column(
-                    children: [
-                      CircleAvatar(
-                        maxRadius: 40,
-                        child: ClipOval(
-                          child: new SizedBox(
-                            width: 300.0,
-                            height: 300.0,
-                            child: (_image != null)
-                                ? Image.file(
-                                    _image!,
-                                    fit: BoxFit.fill,
-                                  )
-                                : Image.network(
-                                    "https://images.unsplash.com/photo-1502164980785-f8aa41d53611?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
-                                    fit: BoxFit.fill,
-                                  ),
-                          ),
-                        ),
-                      ),
+                // if (_authMode == AuthMode.Signup)
+                //   Column(
+                //     children: [
+                //       CircleAvatar(
+                //         maxRadius: 40,
+                //         child: ClipOval(
+                //           child: new SizedBox(
+                //             width: 300.0,
+                //             height: 300.0,
+                //             child: (_image != null)
+                //                 ? Image.file(
+                //                     _image!,
+                //                     fit: BoxFit.fill,
+                //                   )
+                //                 : Image.network(
+                //                     "https://images.unsplash.com/photo-1502164980785-f8aa41d53611?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
+                //                     fit: BoxFit.fill,
+                //                   ),
+                //           ),
+                //         ),
+                //       ),
 
-                      //   NetworkImage(
-                      //       'https://pbs.twimg.com/media/Ew7wqxjWEAYX7Db.jpg'),
-                      // ),
+                //         NetworkImage(
+                //             'https://pbs.twimg.com/media/Ew7wqxjWEAYX7Db.jpg'),
+                //       ),
 
-                      FlatButton.icon(
-                        onPressed: getImage,
-                        icon: Icon(Icons.camera_alt),
-                        label: Text('Pick Your Pic'),
-                      )
-                    ],
-                  ),
+                //       FlatButton.icon(
+                //         onPressed: getImage,
+                //         icon: Icon(Icons.camera_alt),
+                //         label: Text('Pick Your Pic'),
+                //       )
+                //     ],
+                //   ),
                 if (_authMode == AuthMode.Signup)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

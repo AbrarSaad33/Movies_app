@@ -47,11 +47,11 @@ class MoviesProviders with ChangeNotifier {
   Future<void> fetch(String moviesUrl) async {
     var url = Uri.parse(
         "http://api.themoviedb.org/3/movie/$moviesUrl?api_key=5b12e705c1ab3a4385c6d4bcd63ad3a7");
-    final result = await Network().getMovie(url);
+    final result = await Network().get(url);
     // url = Uri.parse(
     //     'https://movieapp-14a99-default-rtdb.firebaseio.com/userFavorites/$_userId.json?auth=$_authToken');
     // print(result);
-    final favoriteData = await Network().getMovie(Uri.parse(
+    final favoriteData = await Network().get(Uri.parse(
         'https://movieapp-14a99-default-rtdb.firebaseio.com/userFavorites/$_userId.json?auth=$_authToken'));
    
 
@@ -93,7 +93,7 @@ class MoviesProviders with ChangeNotifier {
     final url = Uri.parse(
         "http://api.themoviedb.org/3/movie/$movieId/videos?api_key=5b12e705c1ab3a4385c6d4bcd63ad3a7");
 
-    final result = await Network().getMovie(url);
+    final result = await Network().get(url);
     List list = result["results"];
     final List<Videos> loadedVideos = [];
     list.forEach((videoData) {

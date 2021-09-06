@@ -4,8 +4,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
- import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:moives_app/models/network.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Auth with ChangeNotifier {
   String _token = '';
@@ -29,22 +29,15 @@ class Auth with ChangeNotifier {
   String get userId {
     return _userId.toString();
   }
+
   Future<void> _authenticate(String email, String password, String name,
       String phone, String urlSegment) async {
     final url = Uri.parse(
         'https://identitytoolkit.googleapis.com/v1/accounts:$urlSegment?key=AIzaSyC0A2nQi5LIxVUk0TTvmM3nhjN3OZ87pm8');
 
     try {
-      final response = await http.post(url,
-          body: json.encode({
-            'email': email,
-            'password': password,
-            'name': name,
-            'phone': phone,
-            'returnSecureToken': true
-          }));
-
-      final responseData = json.decode(response.body);
+      final responseData =
+          await Network().post(url, email, password, name, phone);
       if (responseData['error'] != null) {
         throw HttpException(responseData['error']['message']);
       }
@@ -68,7 +61,7 @@ class Auth with ChangeNotifier {
 
   Future<void> singup(
       String email, String password, String name, String phone) async {
-    return _authenticate(email, password, name,phone, 'signUp');
+    return _authenticate(email, password, name, phone, 'signUp');
   }
 
   Future<void> singin(
@@ -76,7 +69,7 @@ class Auth with ChangeNotifier {
     return _authenticate(email, password, name, phone, 'signInWithPassword');
   }
 
-  void logout() async{
+  void logout() async {
     _expiryDate = null;
     _userId = '';
     _token = '';
@@ -118,5 +111,4 @@ class Auth with ChangeNotifier {
     _authTimer = Timer(Duration(seconds: timeExpiry), logout);
     print(_authTimer);
   }
-
 }
