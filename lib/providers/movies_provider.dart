@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
-import 'package:moives_app/models/network.dart';
+import 'package:moives_app/models/network_manger.dart';
 import 'package:moives_app/providers/movie_provider.dart';
 
 import 'package:moives_app/models/videos.dart';
+import 'package:http/http.dart' as http;
 
 enum MOVIE_TYPE { TOP_RATED, UPCOMING, ALL }
 
@@ -45,15 +48,9 @@ class MoviesProviders with ChangeNotifier {
   }
 
   Future<void> fetch(String moviesUrl) async {
-    var url = Uri.parse(
-        "http://api.themoviedb.org/3/movie/$moviesUrl?api_key=5b12e705c1ab3a4385c6d4bcd63ad3a7");
-    final result = await Network().get(url);
-    // url = Uri.parse(
-    //     'https://movieapp-14a99-default-rtdb.firebaseio.com/userFavorites/$_userId.json?auth=$_authToken');
-    // print(result);
-    final favoriteData = await Network().get(Uri.parse(
-        'https://movieapp-14a99-default-rtdb.firebaseio.com/userFavorites/$_userId.json?auth=$_authToken'));
-   
+    final result = await Network().get("http://api.themoviedb.org/3/movie/$moviesUrl?api_key=5b12e705c1ab3a4385c6d4bcd63ad3a7",);
+    final favoriteData = await Network().get(
+        'https://movieapp-14a99-default-rtdb.firebaseio.com/userFavorites/$_userId.json?auth=$_authToken');
 
     List loaded = result["results"];
     final List<Movie> loadedMovies = [];
@@ -90,10 +87,7 @@ class MoviesProviders with ChangeNotifier {
 
   List<Videos> videoItems = [];
   Future<void> fetchVideos(String movieId) async {
-    final url = Uri.parse(
-        "http://api.themoviedb.org/3/movie/$movieId/videos?api_key=5b12e705c1ab3a4385c6d4bcd63ad3a7");
-
-    final result = await Network().get(url);
+   final result = await Network().get("http://api.themoviedb.org/3/movie/$movieId/videos?api_key=5b12e705c1ab3a4385c6d4bcd63ad3a7");
     List list = result["results"];
     final List<Videos> loadedVideos = [];
     list.forEach((videoData) {
@@ -103,4 +97,6 @@ class MoviesProviders with ChangeNotifier {
 
     notifyListeners();
   }
+
+  
 }

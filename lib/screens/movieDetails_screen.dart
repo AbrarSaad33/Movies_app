@@ -59,9 +59,9 @@ class _MovieDetailState extends State<MovieDetail> {
                 onPressed: () {
                   
                   setState(() {
-                    print(movieId);
-                    print(loadedMovie.isFavorite);
-                    loadedMovie.toggleFavoriteStatus(authData.userId,authData.token);
+                    // print(movieId);
+                    // print(loadedMovie.isFavorite);
+                   loadedMovie.toggleFavoriteStatus(authData.userId,authData.token);
                     print(loadedMovie.isFavorite);
                   });
                 },

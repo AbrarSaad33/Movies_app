@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:moives_app/providers/auth_provider.dart';
+import 'package:moives_app/providers/movies_provider.dart';
 import '../providers/movie_provider.dart';
 import '../screens/movieDetails_screen.dart';
 import 'package:provider/provider.dart';
@@ -15,7 +16,7 @@ class _MovieItemState extends State<MovieItem> {
   Widget build(BuildContext context) {
     final loadedMovie = Provider.of<Movie>(context, listen: false);
     final authData = Provider.of<Auth>(context, listen: false);
-    
+    final data = Provider.of<MoviesProviders>(context);
     return ClipRRect(
       borderRadius: BorderRadius.circular(15),
       child: GridTile(

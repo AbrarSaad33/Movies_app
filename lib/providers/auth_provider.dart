@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:moives_app/models/network.dart';
+import 'package:moives_app/models/network_manger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Auth with ChangeNotifier {
@@ -32,12 +32,17 @@ class Auth with ChangeNotifier {
 
   Future<void> _authenticate(String email, String password, String name,
       String phone, String urlSegment) async {
-    final url = Uri.parse(
-        'https://identitytoolkit.googleapis.com/v1/accounts:$urlSegment?key=AIzaSyC0A2nQi5LIxVUk0TTvmM3nhjN3OZ87pm8');
-
+    Object body = json.encode({
+      'email': email,
+      'password': password,
+      'name': name,
+      'phone': phone,
+      'returnSecureToken': true
+    });
     try {
-      final responseData =
-          await Network().post(url, email, password, name, phone);
+      final responseData = await Network().post(
+          'https://identitytoolkit.googleapis.com/v1/accounts:$urlSegment?key=AIzaSyC0A2nQi5LIxVUk0TTvmM3nhjN3OZ87pm8',
+          body);
       if (responseData['error'] != null) {
         throw HttpException(responseData['error']['message']);
       }
