@@ -6,7 +6,7 @@ import 'package:moives_app/providers/auth_provider.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:moives_app/screens/moviesOverview_screen.dart';
+import 'package:moives_app/screens/movies_overview_screen.dart';
 
 enum AuthMode { Signup, Login }
 class AuthForm extends StatefulWidget {

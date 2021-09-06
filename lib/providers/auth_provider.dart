@@ -40,7 +40,7 @@ class Auth with ChangeNotifier {
       'returnSecureToken': true
     });
     try {
-      final responseData = await Network().post(
+      final responseData = await NetworkManager().post(
           'https://identitytoolkit.googleapis.com/v1/accounts:$urlSegment?key=AIzaSyC0A2nQi5LIxVUk0TTvmM3nhjN3OZ87pm8',
           body);
       if (responseData['error'] != null) {

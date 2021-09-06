@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:moives_app/providers/auth_provider.dart';
 import 'package:moives_app/providers/movies_provider.dart';
 import 'package:moives_app/screens/auth_screen.dart';
-import 'package:moives_app/screens/favoriteMovie_screen.dart';
+import 'package:moives_app/screens/favorite_movie_screen.dart';
 import 'package:moives_app/screens/splash_screen.dart';
-import 'screens/movieDetails_screen.dart';
-import 'screens/moviesOverview_screen.dart';
+import 'screens/movie_detail_screen.dart';
+import 'screens/movies_overview_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -39,17 +39,17 @@ class MyApp extends StatelessWidget {
               primarySwatch: Colors.amber,
               accentColor: Colors.black,
               fontFamily: 'Lato'),
-          home: Start(),
+          home: SplashScreen(),
           // MoviesOverviewScreen(),
           // auth.isAuth?MoviesOverviewScreen()
           //   :FutureBuilder(future: auth.tryAutoLogin(),builder: (ctx,authResultSnapShot)=>authResultSnapShot.connectionState==ConnectionState.waiting?Text('Loading...'): AuthScreen()) ,
           //
           routes: {
-            Start.routeName: (ctx) => Start(),
+            SplashScreen.routeName: (ctx) => SplashScreen(),
             AuthScreen.routeName: (ctx) => AuthScreen(),
-            MovieDetail.routeName: (ctx) => MovieDetail(),
+           MovieDetailScreen.routeName: (ctx) => MovieDetailScreen(),
             MoviesOverviewScreen.routeName: (ctx) => MoviesOverviewScreen(),
-            FavoriteMovies.routeName: (ctx) => FavoriteMovies(),
+            FavoriteMovieScreen.routeName: (ctx) => FavoriteMovieScreen(),
          
           },
         ),

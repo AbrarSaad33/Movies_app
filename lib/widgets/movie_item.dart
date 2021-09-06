@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:moives_app/providers/auth_provider.dart';
 import 'package:moives_app/providers/movies_provider.dart';
 import '../providers/movie_provider.dart';
-import '../screens/movieDetails_screen.dart';
+import '../screens/movie_detail_screen.dart';
 import 'package:provider/provider.dart';
 
 class MovieItem extends StatefulWidget {
@@ -23,7 +23,7 @@ class _MovieItemState extends State<MovieItem> {
         child: GestureDetector(
           onTap: () {
             Navigator.of(context)
-                .pushNamed(MovieDetail.routeName, arguments: loadedMovie.id);
+                .pushNamed(MovieDetailScreen.routeName, arguments: loadedMovie.id);
           },
           child: Container(
             child: Image.network(

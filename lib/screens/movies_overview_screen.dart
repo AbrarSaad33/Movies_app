@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:moives_app/providers/movie_provider.dart';
 import 'package:moives_app/providers/movies_provider.dart';
-import 'package:moives_app/screens/favoriteMovie_screen.dart';
+import 'package:moives_app/screens/favorite_movie_screen.dart';
 import 'package:moives_app/widgets/app_drawer.dart';
 import '../widgets/movie_grid.dart';
 import 'package:provider/provider.dart';
@@ -91,7 +90,7 @@ class _MoviesOverviewScreenState extends State<MoviesOverviewScreen> {
           IconButton(
             color: Theme.of(context).accentColor,
             onPressed: () {
-              Navigator.of(context).pushNamed(FavoriteMovies.routeName);
+              Navigator.of(context).pushNamed(FavoriteMovieScreen.routeName);
             },
             icon: Icon(Icons.favorite),
           ),

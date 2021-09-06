@@ -1,11 +1,10 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-class Network {
+class NetworkManager {
   String uri = '';
 
-  requestHttp(response) async{
-  
+  requestHttp(response) async {
     if (response.statusCode >= 200 && response.statusCode <= 299) {
       final result = jsonDecode(response.body);
       return result;
@@ -22,20 +21,15 @@ class Network {
       print(
           '${response.statusCode}Error occured while Communication with Server with StatusCode ');
     }
-    }
- 
-    
-  
+  }
 
   Future get(uri) async {
-     final response = await http.get(Uri.parse(uri));
-  return requestHttp(response);
- 
+    final response = await http.get(Uri.parse(uri));
+    return requestHttp(response);
   }
 
   Future post(uri, body) async {
     final response = await http.post(Uri.parse(uri), body: body);
-    return  requestHttp(response);
-  
-}
+    return requestHttp(response);
+  }
 }

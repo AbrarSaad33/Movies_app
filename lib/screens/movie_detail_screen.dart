@@ -8,14 +8,14 @@ import 'package:moives_app/providers/auth_provider.dart';
 import 'package:moives_app/models/videos.dart';
 import 'package:provider/provider.dart';
 
-class MovieDetail extends StatefulWidget {
+class MovieDetailScreen extends StatefulWidget {
   static const routeName = '/movie_detail';
 
   @override
-  _MovieDetailState createState() => _MovieDetailState();
+  _MovieDetailScreenState createState() => _MovieDetailScreenState();
 }
 
-class _MovieDetailState extends State<MovieDetail> {
+class _MovieDetailScreenState extends State< MovieDetailScreen > {
   var isLoading = false;
   var isInit = true;
 

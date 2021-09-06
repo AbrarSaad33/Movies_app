@@ -3,16 +3,16 @@ import 'package:moives_app/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'auth_screen.dart';
-import 'moviesOverview_screen.dart';
+import 'movies_overview_screen.dart';
 
-class Start extends StatefulWidget {
+class SplashScreen extends StatefulWidget {
   static const routeName = '/start';
 
   @override
-  _StartState createState() => _StartState();
+  _SplashScreenState createState() => _SplashScreenState();
 }
 
-class _StartState extends State<Start> {
+class _SplashScreenState extends State<SplashScreen> {
  
 
   @override

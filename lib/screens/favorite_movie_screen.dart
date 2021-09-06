@@ -2,16 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moives_app/widgets/favorite_listView.dart';
 
-class FavoriteMovies extends StatefulWidget {
+class FavoriteMovieScreen extends StatefulWidget {
   static const routeName = '/favorite_movies';
 
   @override
-  _FavoriteMoviesState createState() => _FavoriteMoviesState();
+ _FavoriteMovieScreenState  createState() => _FavoriteMovieScreenState ();
 }
 
-class _FavoriteMoviesState extends State<FavoriteMovies> {
+class _FavoriteMovieScreenState  extends State<FavoriteMovieScreen > {
   var _showFavoritesOnly = true;
-  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
