@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:moives_app/models/network_manger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

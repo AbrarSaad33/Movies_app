@@ -5,15 +5,13 @@ class NetworkManager {
   String uri = '';
 
   requestHttp(response) async {
+    final result = jsonDecode(response.body);
     if (response.statusCode >= 200 && response.statusCode <= 299) {
-      final result = jsonDecode(response.body);
       return result;
     } else if (response.statusCode >= 300 && response.statusCode <= 399) {
-      final result = jsonDecode(response.body);
       print("${response.statusCode} redirection");
       return result;
     } else if (response.statusCode >= 400 || response.statusCode <= 499) {
-      final result = json.decode(response.body);
       print("${response.statusCode} Bad Request ");
       return result;
     } else {

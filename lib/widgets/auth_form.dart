@@ -4,27 +4,28 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moives_app/providers/auth_provider.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:moives_app/models/text_field.dart';
+import 'package:moives_app/models/text_field.dart';
 import 'package:provider/provider.dart';
 import 'package:moives_app/screens/movies_overview_screen.dart';
 
 enum AuthMode { Signup, Login }
-class AuthForm extends StatefulWidget {
 
+class AuthForm extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => AuthFormState();
 }
 
-class AuthFormState extends State<AuthForm>  with SingleTickerProviderStateMixin{
-  
+class AuthFormState extends State<AuthForm>
+    with SingleTickerProviderStateMixin {
   final GlobalKey<FormState> _formKey = GlobalKey();
+  FocusNode nameFocusNode = FocusNode();
   FocusNode phoneFocusNode = FocusNode();
   FocusNode passwordFocusNode = FocusNode();
   FocusNode confirmPasswordFocusNode = FocusNode();
   FocusNode emailFocusNode = FocusNode();
   var _isLoading = false;
   final _passwordController = TextEditingController();
-  final _emailController = TextEditingController();
   late AnimationController _controller;
   late Animation<Offset> slideAnimation;
   late Animation<double> opacityuAnimation;
@@ -131,6 +132,7 @@ class AuthFormState extends State<AuthForm>  with SingleTickerProviderStateMixin
       }
       _showErrorDialog(errorMessage);
     } catch (error) {
+      print(error.toString());
       var errorMessage = 'Could not authenticate you.please try again later';
       _showErrorDialog(errorMessage);
     }
@@ -159,23 +161,20 @@ class AuthFormState extends State<AuthForm>  with SingleTickerProviderStateMixin
       this.number = number;
     });
   }
- 
-
-
 
   @override
   Widget build(BuildContext context) {
-  //    File? _image;
-  //     Future getImage() async {
-  //  final ImagePicker _picker = ImagePicker();
-  //   final  pickedImageFile = await _picker.pickImage(
-  //       source: ImageSource.camera);
+    //    File? _image;
+    //     Future getImage() async {
+    //  final ImagePicker _picker = ImagePicker();
+    //   final  pickedImageFile = await _picker.pickImage(
+    //       source: ImageSource.camera);
 
-  //     setState(() {
-  //       _image = pickedImageFile as File;
-  //         print('Image Path $_image');
-  //     });
-  //   }
+    //     setState(() {
+    //       _image = pickedImageFile as File;
+    //         print('Image Path $_image');
+    //     });
+    //   }
     final deviceSize = MediaQuery.of(context).size;
     return AnimatedContainer(
       duration: Duration(milliseconds: 300),
@@ -257,32 +256,30 @@ class AuthFormState extends State<AuthForm>  with SingleTickerProviderStateMixin
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Expanded(
-                        child: TextFormField(
-                          key: ValueKey('name'),
-                          decoration: InputDecoration(
-                              labelText: 'Name',
-                              prefixIcon: Icon(
-                                Icons.people,
-                                color: Colors.black,
-                              ),
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10.0)),
-                              hintStyle: TextStyle(color: Colors.white)),
-                          keyboardType: TextInputType.name,
-                          textInputAction: TextInputAction.next,
-                          onFieldSubmitted: (_) {
-                            FocusScope.of(context).requestFocus(phoneFocusNode);
-                          },
-                          validator: (value) => value!.isEmpty
-                              ? 'Enter Your Name'
-                              : RegExp(r'[!@#<>?":_`~;[\]\\|=+)(*&^%0-9-]')
-                                      .hasMatch(value)
-                                  ? 'Enter a Valid Name'
-                                  : null,
-                          onSaved: (value) {
-                            _authData['name'] = value!;
-                          },
-                        ),
+                        child: customTextField(
+                            hintText: 'Name',
+                            key: ValueKey('name'),
+                            focusNode: nameFocusNode,
+                            icon: Icons.people,
+                            keyboardType: TextInputType.name,
+                            textInputAction: TextInputAction.next,
+                            onSaved: (value) {
+                              print(value);
+                              _authData['name'] = value!;
+                            },
+                            onFieldSubmitted: (_) {
+                              FocusScope.of(context)
+                                  .requestFocus(phoneFocusNode);
+                            },
+                            validator: (value) {
+                              print(value);
+                              value!.isEmpty
+                                  ? 'Enter Your Name'
+                                  : RegExp(r'[!@#<>?":_`~;[\]\\|=+)(*&^%0-9-]')
+                                          .hasMatch(value)
+                                      ? 'Enter a Valid Name'
+                                      : null;
+                            }),
                       ),
                     ],
                   ),
@@ -293,10 +290,10 @@ class AuthFormState extends State<AuthForm>  with SingleTickerProviderStateMixin
                   Row(
                     children: [
                       Expanded(
-                      
                         child: InternationalPhoneNumberInput(
                           selectorButtonOnErrorPadding: 50,
-                          selectorTextStyle: TextStyle(color: Colors.black,fontSize: 15),
+                          selectorTextStyle:
+                              TextStyle(color: Colors.black, fontSize: 15),
                           spaceBetweenSelectorAndTextField: 1,
                           hintText: "PhoneNumber",
                           key: ValueKey('phone'),
@@ -321,7 +318,6 @@ class AuthFormState extends State<AuthForm>  with SingleTickerProviderStateMixin
                           ),
                           autoValidateMode: AutovalidateMode.disabled,
                           keyboardAction: TextInputAction.next,
-                          
                           initialValue: number,
                           textFieldController: controller,
                           formatInput: false,
@@ -347,34 +343,28 @@ class AuthFormState extends State<AuthForm>  with SingleTickerProviderStateMixin
                 Row(
                   children: [
                     Expanded(
-                      child: TextFormField(
-                        controller: _emailController,
+                      child: customTextField(
+                        hintText: 'E-Mail',
                         key: ValueKey('email'),
-                        decoration: InputDecoration(
-                          labelText: 'E-Mail',
-                          prefixIcon: Icon(
-                            Icons.email,
-                            color: Colors.black,
-                          ),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0)),
-                        ),
+                        icon: Icons.email,
                         keyboardType: TextInputType.emailAddress,
                         textInputAction: TextInputAction.next,
-                        focusNode: emailFocusNode,
+                        onSaved: (value) {
+                          print(value);
+                          _authData['email'] = value!;
+                        },
                         onFieldSubmitted: (_) {
                           FocusScope.of(context)
                               .requestFocus(passwordFocusNode);
                         },
                         validator: (value) {
+                          print(value);
                           if (value!.isEmpty || !value.contains('@')) {
                             return 'Invalid email!';
                           }
                           return null;
                         },
-                        onSaved: (value) {
-                          _authData['email'] = value!;
-                        },
+                        focusNode: emailFocusNode,
                       ),
                     )
                   ],
@@ -385,39 +375,33 @@ class AuthFormState extends State<AuthForm>  with SingleTickerProviderStateMixin
                 Row(
                   children: [
                     Expanded(
-                      child: TextFormField(
-                        key: ValueKey('password'),
-                        decoration: InputDecoration(
-                          labelText: 'Password',
-                          prefixIcon: Icon(
-                            Icons.lock,
-                            color: Colors.black,
-                          ),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0)),
-                        ),
-                        obscureText: true,
-                        focusNode: passwordFocusNode,
-                        textInputAction: _authMode == AuthMode.Login
-                            ? TextInputAction.done
-                            : TextInputAction.next,
-                        onFieldSubmitted: (_) {
-                          FocusScope.of(context)
-                              .requestFocus(confirmPasswordFocusNode);
-                        },
-                        controller: _passwordController,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'invalid Password ';
-                          } else if (value.length < 5) {
-                            return 'Password is too short!';
-                          }
-                        },
-                        onSaved: (value) {
-                          _authData['password'] = value!;
-                        },
-                      ),
-                    )
+                        child: customTextField(
+                      isSecure: true,
+                      focusNode: passwordFocusNode,
+                      hintText: 'Password',
+                      icon: Icons.lock,
+                      keyboardType: TextInputType.visiblePassword,
+                      textInputAction: _authMode == AuthMode.Login
+                          ? TextInputAction.done
+                          : TextInputAction.next,
+                      onFieldSubmitted: (_) {
+                        FocusScope.of(context)
+                            .requestFocus(confirmPasswordFocusNode);
+                      },
+                      controller: _passwordController,
+                      validator: (value) {
+                        print(value);
+                        if (value!.isEmpty) {
+                          return 'invalid Password ';
+                        } else if (value.length < 5) {
+                          return 'Password is too short!';
+                        }
+                      },
+                      onSaved: (value) {
+                        print(value);
+                        _authData['password'] = value!;
+                      },
+                    ))
                   ],
                 ),
                 SizedBox(
@@ -427,29 +411,24 @@ class AuthFormState extends State<AuthForm>  with SingleTickerProviderStateMixin
                   Row(
                     children: [
                       Expanded(
-                        child: TextFormField(
-                          enabled: _authMode == AuthMode.Signup,
-                          decoration: InputDecoration(
-                            labelText: 'Confirm Password',
-                            prefixIcon: Icon(
-                              Icons.lock_outline,
-                              color: Colors.black,
-                            ),
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10.0)),
-                          ),
-                          obscureText: true,
-                          textInputAction: TextInputAction.done,
-                          focusNode: confirmPasswordFocusNode,
-                          validator: _authMode == AuthMode.Signup
-                              ? (value) {
-                                  if (value != _passwordController.text) {
-                                    return 'Passwords do not match!';
-                                  }
+                          child: customTextField(
+                        isSecure: true,
+                        enabled: _authMode == AuthMode.Signup,
+                        focusNode: confirmPasswordFocusNode,
+                        hintText: 'Confirm Password',
+                        icon: Icons.lock_open_outlined,
+                        keyboardType: TextInputType.visiblePassword,
+                        textInputAction: TextInputAction.done,
+                        validator: _authMode == AuthMode.Signup
+                            ? (value) {
+                                print('confirm $value');
+                                print('hello${_passwordController.text}');
+                                if (value != _passwordController.text) {
+                                  return 'Passwords do not match!';
                                 }
-                              : null,
-                        ),
-                      )
+                              }
+                            : null,
+                      ))
                     ],
                   ),
                 SizedBox(

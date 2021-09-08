@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:moives_app/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:animated_splash_screen/animated_splash_screen.dart';
+
 import 'auth_screen.dart';
 import 'movies_overview_screen.dart';
 
@@ -15,31 +15,32 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void didChangeDependencies() {
+   final auth = Provider.of<Auth>(context, listen: false);
+    Timer(
+        Duration(seconds: 2),
+        () => Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (BuildContext context) => auth.isAuth
+                ? MoviesOverviewScreen()
+                : FutureBuilder(
+                    future: auth.tryAutoLogin(),
+                    builder: (ctx, authResultSnapShot) =>
+                        authResultSnapShot.connectionState ==
+                                ConnectionState.waiting
+                            ? Scaffold(
+                                body: Center(
+                                child: CircularProgressIndicator(),
+                              ))
+                            : AuthScreen()))));
+    super.didChangeDependencies();
+  }
  
 
   @override
   Widget build(BuildContext context) {
-     final auth = Provider.of<Auth>(context, listen: false);
-     Timer(
-            Duration(seconds: 3),
-                () =>
-            Navigator.of(context).pushReplacement(MaterialPageRoute(
-                builder: (BuildContext context) => auth.isAuth
-                                ? 
-                                MoviesOverviewScreen()
-                                : FutureBuilder(
-                                    future: auth.tryAutoLogin(),
-                                    builder: (ctx, authResultSnapShot) =>
-                                        authResultSnapShot.connectionState ==
-                                                ConnectionState.waiting
-                                            ? Scaffold(
-                                                body: Center(
-                                                child:
-                                                    CircularProgressIndicator(),
-                                              ))
-                                            : AuthScreen()))));
+  
     return Scaffold(
-
       body: Column(
         children: <Widget>[
           Expanded(
@@ -69,32 +70,54 @@ class _SplashScreenState extends State<SplashScreen> {
                   ),
                   FittedBox(
                     child: Container(
-                        margin: EdgeInsets.only(bottom: 25, top: 20),
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 26, vertical: 10),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(25),
-                          color: Colors.yellow,
-                        ),
-                        child: Row(
-                          children: <Widget>[
-                            Text(
-                              "Start ...... ",
-                              style:
-                                  Theme.of(context).textTheme.button!.copyWith(
-                                        color: Colors.black,
-                                      ),
-                            ),
-                            // SizedBox(width: 10),
-                            // Icon(
-                            //   Icons.arrow_forward,
-                            //   color: Colors.black,
-                            // )
-                          ],
-                        ),
+                      margin: EdgeInsets.only(bottom: 25, top: 20),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 26, vertical: 10),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(25),
+                        color: Colors.yellow,
+                      ),
+                      child: Row(
+                        children: <Widget>[
+                          // GestureDetector(
+                          //   onTap: () {
+                          //     Navigator.of(context).pushReplacement(
+                          //         MaterialPageRoute(
+                          //             builder: (BuildContext context) => auth
+                          //                     .isAuth
+                          //                 ? MoviesOverviewScreen()
+                          //                 : FutureBuilder(
+                          //                     future: auth.tryAutoLogin(),
+                          //                     builder: (ctx,
+                          //                             authResultSnapShot) =>
+                          //                         authResultSnapShot
+                          //                                     .connectionState ==
+                          //                                 ConnectionState
+                          //                                     .waiting
+                          //                             ? Scaffold(
+                          //                                 body: Center(
+                          //                                 child:
+                          //                                     CircularProgressIndicator(),
+                          //                               ))
+                          //                             : AuthScreen())));
+                          //   },
+                          //   child:
+                          Text(
+                            "Start ...... ",
+                            style: Theme.of(context).textTheme.button!.copyWith(
+                                  color: Colors.black,
+                                ),
+                          ),
+                          // ),
+                          // SizedBox(width: 10),
+                          // Icon(
+                          //   Icons.arrow_forward,
+                          //   color: Colors.black,
+                          // )
+                        ],
                       ),
                     ),
-         
+                  ),
                 ],
               ),
             ),
